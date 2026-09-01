@@ -102,7 +102,7 @@ body {
 /* 섹션 헤더 */
 .section-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: baseline;
   margin-bottom: var(--spacing-md);
   padding-bottom: var(--spacing-md);
@@ -114,18 +114,10 @@ body {
   font-size: 1.6rem;
   color: var(--primary-green);
   font-weight: 600;
-  flex: 1;
 }
 
 .time-badge {
-  background-color: var(--accent-brown);
-  color: var(--white);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-  margin-left: var(--spacing-sm);
+  display: none;
 }
 
 /* 섹션 컨텐츠 */
@@ -574,50 +566,70 @@ body {
   font-style: italic;
 }
 
-/* 더 알아보기 */
-.more-info {
+/* 섹션 설명 */
+.section-description {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--dark-text);
+  margin: var(--spacing-md) 0;
+  padding: var(--spacing-md);
+  background-color: var(--light-gray);
+  border-left: 3px solid var(--accent-brown);
+  border-radius: 4px;
+  opacity: 0.95;
+}
+
+/* 스니핏 박스 */
+.snippet-box {
   margin-top: var(--spacing-lg);
   padding-top: var(--spacing-lg);
   border-top: 1px solid var(--border-gray);
 }
 
-.more-info summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: var(--primary-green);
-  padding: var(--spacing-sm);
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  user-select: none;
+.snippet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
 }
 
-.more-info summary:hover {
-  background-color: var(--light-gray);
-}
-
-.more-info summary::-webkit-details-marker {
-  color: var(--primary-green);
-}
-
-.more-info-content {
-  padding: var(--spacing-md) var(--spacing-sm);
-  background-color: var(--light-gray);
-  border-radius: 4px;
-  margin-top: var(--spacing-sm);
-}
-
-.prompt-label {
+.snippet-label {
   font-weight: 700;
   color: var(--primary-green);
-  margin-bottom: var(--spacing-xs);
-  display: block;
+  font-size: 0.95rem;
 }
 
-.prompt-text {
+.copy-button {
+  background-color: var(--primary-green);
+  color: var(--white);
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy-button:hover {
+  background-color: #3d6b1f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(45, 80, 22, 0.3);
+}
+
+.copy-button:active {
+  transform: translateY(0);
+}
+
+.snippet-content {
+  background-color: var(--light-gray);
+  padding: var(--spacing-md);
+  border-radius: 6px;
+  border-left: 3px solid var(--primary-green);
   color: var(--dark-text);
-  line-height: 1.8;
+  line-height: 1.7;
   font-size: 0.95rem;
-  margin: 0;
+  word-break: break-word;
 }
 
 /* 푸터 */
@@ -653,10 +665,6 @@ body {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--spacing-sm);
-  }
-  
-  .time-badge {
-    margin-left: 0;
   }
   
   .comparison-box {
@@ -1138,5 +1146,17 @@ body {
   
   .card-learning-outcomes {
     background-color: #333333;
+  }
+  
+  .section-description {
+    background-color: #333333;
+    color: #e0e0e0;
+    border-color: #666666;
+  }
+  
+  .snippet-content {
+    background-color: #333333;
+    color: #e0e0e0;
+    border-color: var(--primary-green);
   }
 }

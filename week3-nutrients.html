@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>추석 밥상 속 숨은 과학 - 강의 카드뉴스</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #ECE4D2;
+    --card: #FBF8F0;
+    --ink: #262019;
+    --ink-soft: #55503f;
+    --persimmon: #AE4A2B;
+    --persimmon-deep: #7c331d;
+    --pine: #33503A;
+    --pine-deep: #223829;
+    --gold: #A87A24;
+    --gold-deep: #7a5915;
+    --line: #D8CEB6;
+    --cream: #F6F1E4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, .serif {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+
+  p { margin: 0 0 1em 0; }
+  p:last-child { margin-bottom: 0; }
+
+  /* ---------- print bar ---------- */
+  .print-bar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0.9rem 1.5rem;
+    background: rgba(236, 228, 210, 0.92);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .print-button {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--cream);
+    background: var(--ink);
+    border: none;
+    padding: 0.6rem 1.3rem;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .print-button:hover { background: var(--persimmon-deep); }
+  .print-button:focus-visible {
+    outline: 2px solid var(--persimmon);
+    outline-offset: 2px;
+  }
+
+  /* ---------- layout shell ---------- */
+  .deck {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1.25rem 6rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 3rem 2.5rem;
+    margin-top: 1.25rem;
+  }
+
+  /* ---------- cover ---------- */
+  .cover {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    text-align: left;
+  }
+  .cover .kicker {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.2rem;
+  }
+  .cover h1 {
+    font-size: 2.6rem;
+    line-height: 1.25;
+    color: var(--persimmon-deep);
+  }
+  .cover .lede {
+    margin-top: 1.6rem;
+    font-size: 1.05rem;
+    color: var(--ink-soft);
+    max-width: 42ch;
+  }
+  .toc {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--line);
+    padding-top: 1.5rem;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .toc-row {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.98rem;
+  }
+  .toc-num { color: var(--ink-soft); min-width: 1.6rem; }
+
+  /* ---------- chapter opener ---------- */
+  .chapter {
+    color: var(--cream);
+    text-align: left;
+    padding: 4rem 2.5rem;
+    border: none;
+  }
+  .chapter .num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.1rem;
+    opacity: 0.75;
+    margin-bottom: 1rem;
+  }
+  .chapter h2 {
+    font-size: 2rem;
+    line-height: 1.35;
+  }
+  .chapter--persimmon { background: var(--persimmon-deep); }
+  .chapter--pine { background: var(--pine-deep); }
+  .chapter--gold { background: var(--gold-deep); }
+  .chapter--ink { background: var(--ink); }
+
+  /* ---------- content card ---------- */
+  .content h3 {
+    font-size: 1.35rem;
+    color: var(--ink);
+    margin-bottom: 1rem;
+    line-height: 1.4;
+  }
+  .content .body-text {
+    font-size: 1rem;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .content .body-text strong { color: var(--ink); font-weight: 700; }
+
+  .accent-rule {
+    width: 2.5rem;
+    height: 3px;
+    margin-bottom: 1.4rem;
+  }
+  .rule--persimmon { background: var(--persimmon); }
+  .rule--pine { background: var(--pine); }
+  .rule--gold { background: var(--gold); }
+
+  .source-note {
+    margin-top: 1.4rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    border-left: 2px solid var(--line);
+    padding-left: 0.9rem;
+  }
+
+  /* term grid for nutrient breakdowns */
+  .term-list {
+    margin-top: 1.5rem;
+    display: grid;
+    gap: 1rem;
+  }
+  .term-row {
+    display: grid;
+    grid-template-columns: 8.5rem 1fr;
+    gap: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .term-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .term-label {
+    font-family: 'Noto Serif KR', serif;
+    font-weight: 600;
+    font-size: 1rem;
+    color: var(--ink);
+  }
+  .term-desc {
+    font-size: 0.96rem;
+    color: var(--ink-soft);
+  }
+
+  /* function summary triple */
+  .fn-list { margin-top: 1.5rem; display: grid; gap: 1.2rem; }
+  .fn-item { display: grid; grid-template-columns: 6.5rem 1fr; gap: 1rem; }
+  .fn-name { font-family: 'Noto Serif KR', serif; font-weight: 700; color: var(--pine-deep); }
+  .fn-desc { font-size: 0.96rem; color: var(--ink-soft); }
+
+  /* plain dash list */
+  .dash-list { margin-top: 1.4rem; display: grid; gap: 0.75rem; }
+  .dash-item {
+    display: flex;
+    gap: 0.8rem;
+    font-size: 0.98rem;
+    color: var(--ink-soft);
+  }
+  .dash-item::before {
+    content: "—";
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  /* pull quote / insight card */
+  .insight {
+    border-left: 3px solid var(--persimmon);
+    padding-left: 1.4rem;
+  }
+  .insight p.quote {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 1.25rem;
+    line-height: 1.55;
+    color: var(--ink);
+  }
+  .insight .quote-note {
+    margin-top: 1rem;
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  /* teaser box */
+  .teaser {
+    background: var(--gold-deep);
+    color: var(--cream);
+    border: none;
+  }
+  .teaser h3 { color: var(--cream); }
+  .teaser .body-text { color: rgba(246,241,228,0.85); }
+
+  /* activity / snippet */
+  .snippet {
+    margin-top: 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .snippet-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 1.1rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .copy-button {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.82rem;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--ink-soft);
+    border-radius: 3px;
+    padding: 0.3rem 0.75rem;
+    cursor: pointer;
+  }
+  .copy-button:hover { background: var(--ink); color: var(--cream); }
+  .snippet-content {
+    padding: 1.2rem 1.1rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+    white-space: pre-line;
+  }
+
+  /* footer */
+  .footer {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2.5rem 1.25rem 3rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+  }
+
+  /* focus visibility across interactive elements */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--persimmon);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 640px) {
+    .card { padding: 2.2rem 1.5rem; }
+    .cover h1 { font-size: 2rem; }
+    .chapter h2 { font-size: 1.6rem; }
+    .content h3 { font-size: 1.2rem; }
+    .term-row { grid-template-columns: 1fr; gap: 0.3rem; }
+    .fn-item { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+
+  /* ---------- print ---------- */
+  @media print {
+    .print-bar { display: none; }
+    body { background: #fff; }
+    .deck { max-width: 100%; padding: 0 0.4in; }
+    .card, .chapter { break-inside: avoid; border: none; }
+    .chapter { break-before: page; color: #111 !important; background: #fff !important; }
+    .chapter .num, .chapter h2 { color: #111 !important; }
+    .teaser { background: #fff !important; color: #111 !important; border: 1px solid #ccc !important; }
+    .teaser h3, .teaser .body-text { color: #111 !important; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="print-bar">
+    <button class="print-button" onclick="window.print()">인쇄하기</button>
+  </div>
+
+  <div class="deck">
+
+    <!-- COVER -->
+    <section class="card cover">
+      <p class="kicker">추석 특강 · 영양학</p>
+      <h1>추석 밥상 속<br>숨은 과학</h1>
+      <p class="lede">명절에 모여 먹는 밥상 하나에도 역사와 대사생리학이 함께 차려져 있습니다. 오늘은 그 이야기를 풀어봅니다.</p>
+      <div class="toc">
+        <div class="toc-row"><span class="toc-num">01</span><span>왜 우리는 모여서 밥을 먹을까?</span></div>
+        <div class="toc-row"><span class="toc-num">02</span><span>3대 영양소, 제대로 알기</span></div>
+        <div class="toc-row"><span class="toc-num">03</span><span>탄수화물이 식사의 중심이 된 이유</span></div>
+        <div class="toc-row"><span class="toc-num">04</span><span>나의 추석 식사일기</span></div>
+      </div>
+    </section>
+
+    <!-- ===================== SECTION 1 ===================== -->
+    <section class="card chapter chapter--persimmon">
+      <p class="num">01</p>
+      <h2>왜 우리는<br>모여서 밥을 먹을까?</h2>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--persimmon"></div>
+      <h3>고구려의 동맹, 10월의 국중대회</h3>
+      <p class="body-text">중국 사서 위지동이전의 기록에 따르면, 고구려는 매년 10월 하늘에 제사를 지내는 국가적 행사인 <strong>동맹(東盟)</strong>을 열었습니다. 며칠씩 이어지는 이 행사 동안 온 나라가 함께 술을 마시고 노래하고 춤을 췄다고 전해집니다.</p>
+      <p class="source-note">부여의 영고, 예의 무천 등 당시 여러 부족연합국가에 공통적으로 나타난 제천 풍습이며, 오늘날 추석의 뿌리로 여겨지기도 합니다.</p>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--persimmon"></div>
+      <h3>로마의 콘비비움, 식탁 위의 정치</h3>
+      <p class="body-text">비슷한 시기 로마에서는 귀족들이 <strong>콘비비움(convivium)</strong>이라는 연회를 열어 후원자(patron)와 피후원자(client) 관계를 다졌습니다. 누구의 식탁에 초대받았는지가 곧 그 사람의 사회적 지위와 정치적 동맹을 보여주는 신호였습니다.</p>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--persimmon"></div>
+      <h3>시대와 대륙을 넘어선 공통점</h3>
+      <p class="body-text">국가와 시대는 서로 달랐지만, 공동 식사는 어디에서나 비슷한 역할을 했습니다.</p>
+      <div class="dash-list">
+        <div class="dash-item">권력과 관계를 눈으로 확인시키는 자리</div>
+        <div class="dash-item">구성원 사이의 유대감을 다지는 의식</div>
+        <div class="dash-item">한 해의 수확과 풍요를 함께 나누고 과시하는 순간</div>
+      </div>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--persimmon"></div>
+      <h3>커먼셀리티, 함께 먹는다는 것의 심리학</h3>
+      <p class="body-text">인류학에서는 함께 음식을 나누는 행위를 <strong>커먼셀리티(commensality)</strong>라 부릅니다. 같은 식탁에 앉는 것만으로 서로를 향한 경계가 낮아지고 신뢰와 소속감이 쌓인다는 것이 여러 연구에서 관찰되어 온 현상입니다.</p>
+    </section>
+
+    <section class="card content insight">
+      <p class="quote">그래서 오늘날에도 우리는 명절이면 먼 길을 마다하지 않고 모여, 다시 한 상에 둘러앉습니다.</p>
+      <p class="quote-note">고구려의 동맹이든 로마의 콘비비움이든, 그 흐름은 결국 지금 우리의 추석 밥상까지 이어지고 있습니다.</p>
+    </section>
+
+    <!-- ===================== SECTION 2 ===================== -->
+    <section class="card chapter chapter--pine">
+      <p class="num">02</p>
+      <h2>3대 영양소,<br>제대로 알기</h2>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--pine"></div>
+      <h3>탄수화물의 세 갈래</h3>
+      <p class="body-text">탄수화물은 분자의 크기에 따라 세 종류로 나뉘며, 크기가 커질수록 소화와 흡수 속도가 느려집니다.</p>
+      <div class="term-list">
+        <div class="term-row">
+          <span class="term-label">단당류</span>
+          <span class="term-desc">포도당, 과당, 갈락토오스처럼 더 이상 쪼개지지 않는 가장 작은 단위</span>
+        </div>
+        <div class="term-row">
+          <span class="term-label">이당류</span>
+          <span class="term-desc">단당류 두 개가 결합한 형태. 설탕, 유당, 맥아당이 대표적</span>
+        </div>
+        <div class="term-row">
+          <span class="term-label">다당류</span>
+          <span class="term-desc">단당류가 길게 연결된 사슬. 전분, 글리코겐, 식이섬유가 여기에 속함</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--pine"></div>
+      <h3>단백질, 아미노산의 연결고리</h3>
+      <p class="body-text">단백질은 20종의 아미노산이 사슬처럼 이어져 만들어집니다. 이 중 몸에서 스스로 합성할 수 없어 반드시 음식으로 섭취해야 하는 아미노산이 있고, 체내에서 합성이 가능한 아미노산이 있습니다.</p>
+      <div class="term-list">
+        <div class="term-row">
+          <span class="term-label">필수아미노산</span>
+          <span class="term-desc">9종. 체내 합성이 되지 않아 식품으로만 공급받을 수 있음</span>
+        </div>
+        <div class="term-row">
+          <span class="term-label">비필수아미노산</span>
+          <span class="term-desc">나머지 아미노산. 필요할 때 체내에서 합성 가능</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--pine"></div>
+      <h3>지방, 구조가 다르면 성질도 다르다</h3>
+      <p class="body-text">지방은 지방산의 결합 형태에 따라 상온에서의 상태와 몸속 역할이 달라집니다.</p>
+      <div class="term-list">
+        <div class="term-row">
+          <span class="term-label">포화지방</span>
+          <span class="term-desc">상온에서 고체 형태. 주로 동물성 식품에 많음</span>
+        </div>
+        <div class="term-row">
+          <span class="term-label">불포화지방</span>
+          <span class="term-desc">상온에서 액체 형태. 식물성 기름, 생선류에 많음</span>
+        </div>
+        <div class="term-row">
+          <span class="term-label">DHA · EPA</span>
+          <span class="term-desc">오메가-3 계열의 대표 지방산. 등푸른 생선에 풍부하며 항염증 작용과 두뇌 기능에 관여</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--pine"></div>
+      <h3>세 영양소, 각자의 역할</h3>
+      <div class="fn-list">
+        <div class="fn-item">
+          <span class="fn-name">탄수화물</span>
+          <span class="fn-desc">뇌와 근육이 가장 먼저 찾는 즉각적인 에너지원</span>
+        </div>
+        <div class="fn-item">
+          <span class="fn-name">단백질</span>
+          <span class="fn-desc">근육, 효소, 호르몬을 구성하는 몸의 재료</span>
+        </div>
+        <div class="fn-item">
+          <span class="fn-name">지방</span>
+          <span class="fn-desc">에너지를 저장하고 세포막과 호르몬의 원료가 됨</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SECTION 3 ===================== -->
+    <section class="card chapter chapter--gold">
+      <p class="num">03</p>
+      <h2>탄수화물이<br>식사의 중심이 된 이유</h2>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--gold"></div>
+      <h3>왜 유독 탄수화물이 밥상의 주인공이 되었을까</h3>
+      <p class="body-text">세 영양소 중에서도 탄수화물은 유독 밥상의 중심을 차지해 왔습니다. 그 답은 우리 몸의 대사를 지휘하는 호르몬, <strong>인슐린</strong>에 있습니다.</p>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--gold"></div>
+      <h3>인슐린이 지휘하는 대사</h3>
+      <p class="body-text">인슐린은 단순히 혈당을 낮추는 호르몬이 아니라, 몸 전체의 대사 방향을 결정하는 신호입니다.</p>
+      <div class="dash-list">
+        <div class="dash-item">포도당을 세포 안으로 들여 에너지로 쓰게 함</div>
+        <div class="dash-item">남는 포도당을 글리코겐으로 저장</div>
+        <div class="dash-item">아미노산 흡수를 도와 단백질 합성(mTOR 경로)을 촉진</div>
+        <div class="dash-item">지방의 합성과 저장을 촉진</div>
+        <div class="dash-item">지방분해와 자가포식 같은 분해 작용은 억제</div>
+      </div>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--gold"></div>
+      <h3>인슐린과 IGF, 닮은 두 호르몬</h3>
+      <p class="body-text">인슐린과 IGF-1은 구조가 비슷한 사촌 관계의 호르몬입니다. 두 호르몬은 서로의 수용체에도 약하게 반응할 만큼 닮아 있어, 결국 같은 신호 경로(PI3K-Akt-mTOR)로 이어집니다.</p>
+    </section>
+
+    <section class="card content insight">
+      <p class="quote">탄수화물은 인슐린을 가장 빠르고 강하게 깨우는 스위치입니다.</p>
+      <p class="quote-note">인슐린이 강하게 켜지면 IGF 경로, 즉 성장과 근육 합성을 지휘하는 신호까지 함께 켜집니다. 탄수화물 섭취는 그래서 단순한 에너지 공급을 넘어, 몸의 성장과 회복까지 조율하는 일입니다.</p>
+    </section>
+
+    <section class="card content teaser">
+      <h3>다음 시간 예고</h3>
+      <p class="body-text">이 스위치는 사람에게만 있는 것이 아닙니다. 다음 시간, 한우의 지방세포 분화와 근육 성장 이야기에서 같은 스위치를 다시 만나게 됩니다.</p>
+    </section>
+
+    <!-- ===================== SECTION 4 ===================== -->
+    <section class="card chapter chapter--ink">
+      <p class="num">04</p>
+      <h2>나의<br>추석 식사일기</h2>
+    </section>
+
+    <section class="card content">
+      <div class="accent-rule rule--persimmon"></div>
+      <h3>오늘 배운 것을 내 밥상에 적용해보기</h3>
+      <p class="body-text">연휴 동안 실제로 먹은 음식을 기록해보면, 막연했던 "많이 먹었다"는 느낌이 구체적인 숫자로 바뀝니다.</p>
+      <div class="snippet">
+        <div class="snippet-header">
+          <span>식사일기 양식</span>
+          <button class="copy-button" onclick="copyToClipboard('diary-template')">복사</button>
+        </div>
+        <div class="snippet-content" id="diary-template">추석 연휴 식사일기
+
+1. 음식명:
+2. 대략적인 양:
+3. 예상 칼로리:
+4. 주된 영양소 (탄수화물 / 단백질 / 지방):
+
+연휴가 끝난 뒤, 기록한 끼니를 모아 하루 평균 칼로리를 계산해보세요.</div>
+      </div>
+    </section>
+
+    <section class="card content insight">
+      <p class="quote">숫자로 적어보는 순간, 감으로만 알던 밥상이 데이터가 됩니다.</p>
+      <p class="quote-note">오늘 배운 탄수화물·단백질·지방의 역할을 떠올리며, 자신의 추석 식사가 어느 쪽으로 치우쳐 있었는지 스스로 점검해보세요.</p>
+    </section>
+
+  </div>
+
+  <div class="footer">
+    <p>추석 밥상 속 숨은 과학 · 강의 자료</p>
+  </div>
+
+  <script>
+    function copyToClipboard(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const button = event.target;
+        const originalText = button.innerText;
+        button.innerText = '복사됨';
+        setTimeout(() => { button.innerText = originalText; }, 2000);
+      });
+    }
+  </script>
+
+</body>
+</html>

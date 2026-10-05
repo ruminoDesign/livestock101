@@ -156,15 +156,38 @@
     @media (prefers-reduced-motion: reduce) {
       * { transition: none !important; }
     }
+
+    .print-button {
+      margin-top: 1rem;
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 999px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .print-button:hover,
+    .print-button:focus-visible { background: rgba(255, 255, 255, 0.15); }
+
+    @media print {
+      .print-button, .toolbar, .copy-button { display: none !important; }
+      body { background: #FFFFFF; }
+      .header { background: #FFFFFF; color: #2D5016; padding: 1rem 0; }
+      details.chapter { box-shadow: none; break-inside: avoid-page; }
+      .arrow { display: none; }
+    }
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="header-content">
-      <h1 class="title">사료 원료의 역사</h1>
-      <p class="subtitle">닭 한 마리가 6주 만에 자라기까지, 1만 년의 이야기</p>
-    </div>
-  </header>
+<header class="header">
+  <div class="header-content">
+    <h1 class="title">사료 원료의 역사</h1>
+    <p class="subtitle">닭 한 마리가 6주 만에 자라기까지, 1만 년의 이야기</p>
+    <button class="print-button" type="button" onclick="printAll()">🖨️ 전체 출력하기</button>
+  </div>
+</header>
 
   <main class="container">
 
@@ -581,6 +604,27 @@
     }
     function toggleAll(open) {
       document.querySelectorAll('details.chapter').forEach(d => { d.open = open; });
+    let openStates = [];
+
+    function expandForPrint() {
+      const chapters = document.querySelectorAll('details.chapter');
+      openStates = Array.from(chapters, d => d.open);
+      chapters.forEach(d => { d.open = true; });
+    }
+    
+    function restoreAfterPrint() {
+      document.querySelectorAll('details.chapter').forEach((d, i) => {
+        d.open = openStates[i] ?? false;
+      });
+    }
+    
+    function printAll() {
+      expandForPrint();
+      window.print();
+    }
+    
+    window.addEventListener('beforeprint', expandForPrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
     }
   </script>
 </body>

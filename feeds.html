@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가축사양학 - 사료 원료의 역사</title>
+  <style>
+    :root {
+      --primary-green: #2D5016;
+      --accent-brown: #8B7355;
+      --light-bg: #FAFAF8;
+      --white: #FFFFFF;
+      --dark-text: #2C2C2C;
+      --light-gray: #F5F5F3;
+      --border-gray: #E8E8E6;
+      --muted-text: #5E5E5A;
+      --story-bg: #FBF8F3;
+      --story-border: #D9CBB6;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.75;
+      word-break: keep-all;
+    }
+
+    /* Header */
+    .header {
+      background: var(--primary-green);
+      color: #FFFFFF;
+      text-align: center;
+      padding: 3rem 1rem 2.5rem;
+    }
+    .title { font-family: var(--font-serif); font-size: 2.1rem; letter-spacing: -0.01em; }
+    .subtitle { opacity: .88; margin-top: .4rem; font-size: 1.05rem; }
+
+    .container { max-width: 820px; margin: 0 auto; padding: 2rem 1rem 3rem; }
+
+    .toolbar { display: flex; justify-content: flex-end; gap: .5rem; margin-bottom: 1rem; }
+    .tool-button {
+      background: var(--white); color: var(--primary-green);
+      border: 1px solid var(--border-gray); border-radius: 999px;
+      padding: .35rem 1rem; font-size: .85rem; cursor: pointer;
+    }
+    .tool-button:hover { border-color: var(--primary-green); }
+
+    /* Toggle */
+    details.chapter {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,.04);
+      overflow: hidden;
+    }
+    details.chapter > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 1.15rem 1.4rem;
+      display: flex; align-items: center; gap: .9rem;
+      user-select: none;
+    }
+    details.chapter > summary::-webkit-details-marker { display: none; }
+    .arrow {
+      flex: 0 0 auto;
+      width: 0; height: 0;
+      border-left: 9px solid var(--accent-brown);
+      border-top: 6px solid transparent;
+      border-bottom: 6px solid transparent;
+      transition: transform .2s ease;
+    }
+    details.chapter[open] > summary .arrow { transform: rotate(90deg); }
+    .summary-text { display: flex; flex-direction: column; }
+    .chapter-title { font-family: var(--font-serif); color: var(--primary-green); font-size: 1.25rem; font-weight: 700; }
+    .chapter-hook { font-size: .88rem; color: var(--muted-text); }
+    details.chapter > summary:hover .chapter-title { text-decoration: underline; text-underline-offset: 4px; }
+    details.chapter > summary:focus-visible { outline: 3px solid #E0B97A; outline-offset: -3px; }
+    details.chapter[open] > summary { border-bottom: 1px solid var(--border-gray); }
+
+    .chapter-body { padding: 1.3rem 1.4rem 1.5rem; }
+
+    /* Bullets */
+    .content-list { padding-left: 1.2rem; }
+    .content-list > li { margin-bottom: .55rem; }
+    .content-list li::marker { color: var(--accent-brown); }
+    .content-list ul { padding-left: 1.1rem; margin-top: .25rem; color: var(--muted-text); font-size: .94rem; }
+    .content-list ul li { margin-bottom: .2rem; }
+    strong { color: var(--primary-green); }
+
+    table { width: 100%; border-collapse: collapse; font-size: .92rem; margin: .8rem 0 1rem; }
+    th, td { padding: .5rem; border-bottom: 1px solid var(--border-gray); text-align: left; vertical-align: top; }
+    th { background: var(--light-gray); color: var(--primary-green); white-space: nowrap; }
+    .table-wrap { overflow-x: auto; }
+
+    .chicken-note {
+      margin-top: 1rem;
+      background: var(--light-gray);
+      border-left: 4px solid var(--primary-green);
+      border-radius: 6px;
+      padding: .7rem 1rem;
+      font-size: .94rem;
+    }
+
+    /* Story box */
+    .story-box {
+      margin-top: 1.3rem;
+      background: var(--story-bg);
+      border: 1.5px solid var(--story-border);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+    }
+    .story-label {
+      display: inline-block;
+      font-size: .82rem; font-weight: 700;
+      color: var(--accent-brown);
+      letter-spacing: .02em;
+      margin-bottom: .6rem;
+    }
+    .story-box p { font-size: .97rem; margin-bottom: .8rem; }
+    .story-box p:last-child { margin-bottom: 0; }
+
+    /* Snippet */
+    .snippet-box { border: 1px dashed var(--accent-brown); border-radius: 8px; overflow: hidden; margin-top: 1.2rem; }
+    .snippet-header { display: flex; justify-content: space-between; align-items: center; background: #F6F1EB; padding: .5rem 1rem; }
+    .snippet-label { font-weight: 600; color: var(--accent-brown); font-size: .9rem; }
+    .copy-button { background: var(--accent-brown); color: #FFFFFF; border: none; padding: .3rem .9rem; border-radius: 6px; cursor: pointer; font-size: .82rem; }
+    .copy-button:hover { opacity: .88; }
+    .snippet-content { padding: .9rem 1rem; font-size: .92rem; white-space: pre-line; background: var(--white); }
+
+    /* Footer */
+    .footer { background: var(--dark-text); color: #DADAD6; text-align: center; padding: 1.6rem 1rem; font-size: .88rem; }
+    .footer-note { opacity: .7; font-size: .8rem; margin-top: .2rem; }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-green: #8DBA6E; --accent-brown: #C4A47F; --light-bg: #1A1B18; --white: #24251F;
+        --dark-text: #E6E6E1; --light-gray: #2C2D27; --border-gray: #3A3B34; --muted-text: #B3B3AC;
+        --story-bg: #2B2721; --story-border: #5A4C3A;
+      }
+      .header { background: #22361A; }
+      .footer { background: #111210; }
+      .snippet-header { background: #302A22; }
+      .copy-button { color: #1A1B18; }
+    }
+    @media (max-width: 480px) {
+      .title { font-size: 1.55rem; }
+      details.chapter > summary { padding: 1rem; }
+      .chapter-body { padding: 1rem; }
+      .story-box { padding: 1rem; }
+      .chapter-title { font-size: 1.1rem; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    /* Print button */
+    .print-bar { margin-top: 1.1rem; }
+    .print-button {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 999px;
+      padding: .45rem 1.3rem;
+      font-size: .92rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .print-button:hover,
+    .print-button:focus-visible { background: rgba(255, 255, 255, 0.15); outline: none; }
+
+    /* Print layout */
+    @media print {
+      @page { margin: 15mm 12mm; }
+      :root {
+        --primary-green: #2D5016; --accent-brown: #8B7355; --light-bg: #FFFFFF; --white: #FFFFFF;
+        --dark-text: #2C2C2C; --light-gray: #F5F5F3; --border-gray: #DDDDDA; --muted-text: #555552;
+        --story-bg: #FBF8F3; --story-border: #D9CBB6;
+      }
+      body { background: #FFFFFF; font-size: 11pt; line-height: 1.6; }
+      .print-bar, .toolbar, .copy-button, .arrow { display: none !important; }
+      .header { background: #FFFFFF !important; color: var(--primary-green); padding: 0 0 1rem; border-bottom: 2px solid var(--primary-green); }
+      .container { max-width: none; padding: 1rem 0 0; }
+      details.chapter { box-shadow: none; border: none; border-radius: 0; margin-bottom: 1.5rem; }
+      details.chapter > summary { padding: .5rem 0; border-bottom: 1.5px solid var(--primary-green) !important; }
+      .chapter-body { padding: .8rem 0 0; }
+      .story-box, .chicken-note, .snippet-box, table { break-inside: avoid; }
+      .snippet-header { background: #F6F1EB !important; }
+      .footer { display: none; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="title">사료 원료의 역사</h1>
+      <p class="subtitle">닭 한 마리가 6주 만에 자라기까지, 1만 년의 이야기</p>
+      <div class="print-bar">
+        <button class="print-button" type="button" onclick="printAll()">🖨️ 전체 출력하기</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="toolbar">
+      <button class="tool-button" type="button" onclick="toggleAll(true)">모두 펼치기</button>
+      <button class="tool-button" type="button" onclick="toggleAll(false)">모두 접기</button>
+    </div>
+
+    <!-- 프롤로그 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">프롤로그: 오늘 먹은 치킨은 무엇을 먹고 자랐을까?</span>
+          <span class="chapter-hook">옥수수와 대두박, 이 두 원료에 숨은 1만 년</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li>요즘 육계는 병아리로 들어와 <strong>약 5~6주</strong> 만에 출하됨</li>
+          <li>육계 사료의 대부분은 <strong>옥수수</strong>와 <strong>대두박</strong></li>
+          <li>여기에 칼슘, 인, 비타민 같은 원료가 아주 조금 더해짐</li>
+          <li>질문: <strong>왜 하필 이 원료들일까?</strong></li>
+        </ul>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>치킨 한 마리를 앞에 두고 이런 질문을 해 본 적이 있나요? "이 닭은 무엇을 먹고 이렇게 자랐을까?" 정답은 의외로 단순합니다. 대부분 옥수수와 콩에서 기름을 짜고 남은 대두박입니다. 그런데 이 단순한 조합은 누군가 하루아침에 정한 것이 아닙니다.</p>
+          <p>멕시코의 작은 야생 풀이 옥수수가 되기까지, 콩기름을 짜고 남은 찌꺼기가 최고의 단백질 사료가 되기까지, 그리고 흰쌀만 먹은 닭이 병드는 것을 보고 비타민을 발견하기까지 수천 년의 시간이 쌓였습니다. 오늘은 사료 원료를 외우는 대신, 그 원료들이 어떻게 가축의 밥상에 오르게 되었는지 시간 여행을 떠나 보겠습니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 조사 과제</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-1', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-1">한국에서 기르는 육계는 보통 몇 주 만에 출하되고, 출하 체중은 얼마인지 알려줘. 50년 전과 비교해서 육계의 성장 속도가 얼마나 빨라졌는지, 그 이유를 품종, 사료, 사육 환경으로 나누어 대학교 2학년이 이해할 수 있게 간단히 설명해줘.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 농업과 가축의 시작 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">농업과 가축의 시작</span>
+          <span class="chapter-hook">저장할 수 있다는 것, 그것이 모든 것을 바꿨다</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li><strong>시간의 규모</strong>
+            <ul>
+              <li>공룡 멸종 약 6,600만 년 전 → 현생 인류 등장 약 30만 년 전 → 농업 시작 약 1만 2천~1만 년 전</li>
+              <li>인류 역사의 마지막 약 3%만이 농업의 시간</li>
+            </ul>
+          </li>
+          <li><strong>왜 밀과 보리였나</strong>
+            <ul>
+              <li>비옥한 초승달 지대(메소포타미아)에 원래 많이 자라고 있었음</li>
+              <li>낟알이 크고 영양이 풍부함</li>
+              <li>무엇보다 마른 낟알은 <strong>오래 저장</strong>할 수 있었음</li>
+            </ul>
+          </li>
+          <li><strong>왜 가축을 길렀나</strong>
+            <ul>
+              <li>살려 두었다가 필요할 때 잡는 '걸어 다니는 저장고'</li>
+              <li>사람이 못 먹는 풀, 볏짚, 껍질을 고기와 젖으로 바꿔 줌</li>
+              <li>젖, 털, 노동력, 거름까지 덤으로 얻음</li>
+              <li>온순하고, 무리 지어 살고, 빨리 번식하는 동물만 가축이 됨</li>
+            </ul>
+          </li>
+          <li><strong>저장은 곧 권력</strong>
+            <ul>
+              <li>남는 곡식이 계급을 만들고, 곡식은 세금이 됨</li>
+              <li>초기 문자 기록의 상당수는 곡식과 가축을 적은 장부</li>
+              <li>가축은 재산, 고기는 여유와 권력의 상징</li>
+            </ul>
+          </li>
+          <li><strong>부가가치와 대가</strong>: 곡식을 고기로 바꾸면 값은 오르지만 칼로리는 줄어듦</li>
+        </ul>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>가축</th><th>가축화 시기 (대략)</th><th>고기 1kg당 필요한 사료 (대략)</th></tr></thead>
+            <tbody>
+              <tr><td>양, 염소</td><td>약 1만 1천~1만 년 전</td><td>-</td></tr>
+              <tr><td>소</td><td>약 1만 500년 전</td><td>약 6kg 이상</td></tr>
+              <tr><td>돼지</td><td>약 1만 500년 전</td><td>약 3kg</td></tr>
+              <tr><td>닭</td><td>약 3,500년 전 (동남아시아)</td><td>약 2kg</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>약 1만 1,700년 전, 마지막 빙하기가 끝나고 지구가 따뜻해졌습니다. 지금의 이라크, 시리아, 터키 일대인 '비옥한 초승달 지대'에는 야생 밀과 보리가 넓게 자라고 있었습니다. 사람들은 처음엔 이것을 채집해 먹다가, 이삭이 잘 떨어지지 않는 개체를 골라 씨를 뿌리기 시작했습니다. 농업의 시작입니다.</p>
+          <p>밀과 보리가 특별했던 이유는 '저장'이었습니다. 사냥한 고기는 며칠이면 상하지만 마른 낟알은 몇 년도 버팁니다. 겨울과 가뭄에도 먹을 것이 있다는 것은 더 이상 떠돌지 않아도 된다는 뜻이었습니다. 사람들은 한곳에 머물러 마을을 이루었습니다.</p>
+          <p>비슷한 무렵 양, 염소, 소, 돼지가 사람 곁으로 들어왔습니다. 가축은 살려 두면 상하지 않는 '걸어 다니는 고기 창고'였고, 무엇보다 사람이 먹지 못하는 풀과 볏짚을 고기와 젖으로 바꿔 주었습니다. 흥미롭게도 닭은 훨씬 늦은 약 3,500년 전 동남아시아에서 가축이 되었는데, 처음에는 고기보다 닭싸움이나 제사에 쓰였다는 연구가 있습니다.</p>
+          <p>저장할 수 있다는 것은 쌓을 수 있다는 뜻이기도 했습니다. 창고에 곡식을 많이 쌓은 사람이 힘을 갖게 되었고, 곡식은 세금이 되었습니다. 메소포타미아의 초기 쐐기문자 기록 상당수는 누가 곡식과 양을 얼마나 바쳤는지 적은 장부였습니다. 남는 곡식이 생기자 그것을 가축에게 먹여 더 비싼 고기로 바꾸기 시작했습니다. 값은 올라갔지만 칼로리는 줄어드는 거래였고, 그래서 오랫동안 고기는 여유 있는 사람들의 음식이었습니다. "더 적은 사료로 더 많은 고기를"이라는 사양학의 질문은 이때부터 시작된 셈입니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 토의 프롬프트</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-2', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-2">농업이 시작되면서 남는 곡식(잉여 생산물)이 생긴 것이 사회 구조와 권력에 어떤 영향을 주었는지 설명해줘. 그리고 곡식을 사람이 먹는 것과 가축에게 먹여 고기로 바꾸는 것의 장단점을 '사료 효율'이라는 개념을 써서 대학교 2학년 수준으로 비교해줘.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 대분류 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">사료 원료의 대분류: 세 개의 시대</span>
+          <span class="chapter-hook">풀의 시대, 곡물의 시대, 과학의 시대</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li><strong>조사료</strong>: 섬유가 많은 풀 종류. 가장 오래된 사료</li>
+          <li><strong>농후사료</strong>: 에너지와 단백질이 진한 곡류, 박류 등. 농업 이후 본격화</li>
+          <li><strong>보조사료</strong>: 비타민, 광물질, 첨가제. 20세기 과학의 산물</li>
+        </ul>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>대분류</th><th>세부 분류</th><th>대표 원료</th><th>주 역할</th></tr></thead>
+            <tbody>
+              <tr><td rowspan="1"><strong>조사료</strong></td><td>건초, 생초, 사일리지, 볏짚</td><td>알팔파, 클로버, 옥수수 사일리지</td><td>섬유 (주로 반추가축)</td></tr>
+              <tr><td rowspan="5"><strong>농후사료</strong></td><td>곡류</td><td>옥수수, 밀, 보리</td><td>에너지</td></tr>
+              <tr><td>강피류</td><td>밀기울, 쌀겨</td><td>에너지 보충, 섬유</td></tr>
+              <tr><td>식물성 단백질 (박류)</td><td>대두박, 채종박</td><td>단백질</td></tr>
+              <tr><td>동물성 단백질</td><td>어분, 곤충</td><td>단백질, 필수 아미노산</td></tr>
+              <tr><td>유지류</td><td>대두유, 동물성 지방</td><td>고에너지</td></tr>
+              <tr><td rowspan="3"><strong>보조사료</strong></td><td>광물질</td><td>석회석, 인산칼슘, 소금</td><td>칼슘, 인, 나트륨</td></tr>
+              <tr><td>비타민</td><td>비타민 프리믹스</td><td>생리 기능 조절</td></tr>
+              <tr><td>첨가제</td><td>아미노산, 효소제, 생균제</td><td>영양 보완, 소화 개선</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>사료 원료의 분류표는 외울 것이 많아 보이지만, 시간 순서로 보면 의외로 간단합니다. 가장 먼저 등장한 것은 조사료입니다. 가축화 초기의 양과 소는 들판의 풀을 뜯어 먹었습니다. 사람이 따로 사료를 만들 필요 없이, 가축이 알아서 풀을 찾아 먹던 시대입니다.</p>
+          <p>농업이 발달해 곡식이 남기 시작하자 농후사료의 시대가 열렸습니다. 곡식과 기름 짜고 남은 깻묵은 풀보다 에너지와 단백질이 훨씬 진해서 가축을 빨리, 크게 키울 수 있었습니다.</p>
+          <p>마지막으로 20세기에 들어 과학자들은 눈에 보이지 않는 영양소를 하나씩 찾아냈습니다. 아주 적은 양이지만 빠지면 가축이 병드는 비타민과 미네랄입니다. 이렇게 보조사료가 더해지면서 오늘날의 배합사료가 완성되었습니다. 지금부터 이 세 시대를 차례로 여행해 보겠습니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 비교 과제</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-3', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-3">사료 원료를 조사료, 농후사료, 보조사료로 나누는 기준을 설명해줘. 그리고 한우, 돼지, 육계에게 주는 사료에서 이 세 가지의 비중이 어떻게 다른지 표로 비교하고, 그 차이가 소화기관 구조와 어떤 관계가 있는지 간단히 알려줘.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 조사료 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">조사료: 겨울을 버티는 기술</span>
+          <span class="chapter-hook">풀은 여름엔 넘치고, 겨울엔 사라진다</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li><strong>고대</strong>: 풀을 따라 이동하는 방목과 유목. 반추위 미생물이 섬유를 소화</li>
+          <li><strong>고대 페르시아</strong>: 말을 먹이려고 기른 가장 오래된 재배 사료 작물 <strong>알팔파</strong>. 군마의 풀이 곧 국력</li>
+          <li><strong>중세 유럽</strong>: 건초로 겨울을 버팀. 먹일 풀이 모자라 늦가을에 가축을 잡아 햄, 소시지 같은 저장육으로 만듦</li>
+          <li><strong>18세기 영국</strong>: 순무와 클로버를 넣은 <strong>윤작</strong>
+            <ul>
+              <li>겨울 사료 확보 → 가축 증가 → 분뇨 증가 → 땅이 기름져 곡식 증산</li>
+              <li>농업혁명의 중요한 바탕</li>
+            </ul>
+          </li>
+          <li><strong>19세기</strong>: 공기 없이 발효시켜 저장하는 <strong>사일리지</strong> 등장 (김치와 같은 젖산 발효)</li>
+          <li><strong>우리나라</strong>
+            <ul>
+              <li>볏짚과 콩깍지를 가마솥에 끓인 쇠죽</li>
+              <li>지금은 가을 논의 하얀 '공룡알', 곤포 사일리지</li>
+              <li>국내 생산이 부족해 건초를 상당량 수입</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="chicken-note">🐔 <strong>닭에게는?</strong> 닭은 반추위가 없어 섬유를 거의 소화하지 못합니다. 조사료는 주로 소, 양, 염소의 이야기입니다.</div>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>풀은 공짜처럼 보이지만 치명적인 약점이 있습니다. 봄과 여름에는 넘쳐나지만 겨울이 오면 사라진다는 것입니다. 그래서 조사료의 역사는 곧 "겨울을 어떻게 버틸 것인가"의 역사였습니다.</p>
+          <p>고대 페르시아 사람들은 말을 먹이기 위해 알팔파를 길렀습니다. 알팔파는 단백질이 풍부해 '사료의 여왕'으로 불리며, 기록상 가장 오래된 재배 사료 작물로 꼽힙니다. 페르시아 전쟁 무렵 그리스로 전해졌다고 하니, 군마를 먹이는 풀이 곧 국력이었던 셈입니다.</p>
+          <p>중세 유럽의 농민들은 여름에 풀을 베어 말린 건초로 겨울을 났습니다. 하지만 건초는 늘 모자랐고, 겨울을 넘길 수 없는 가축은 늦가을에 잡아 소금에 절이거나 연기에 그을렸습니다. 지금 우리가 먹는 햄과 소시지 문화가 이렇게 발달했습니다.</p>
+          <p>18세기 영국에서는 밀, 순무, 보리, 클로버를 돌려 짓는 윤작이 퍼졌습니다. 이 방법을 널리 알린 귀족은 '순무 타운센드'라는 별명까지 얻었습니다. 순무와 클로버 덕분에 겨울에도 가축을 먹일 수 있게 되자 가축이 늘고, 분뇨가 늘어 땅이 기름지고, 곡식 수확도 늘었습니다. 풀 한 포기가 농업 전체를 바꾼 것입니다.</p>
+          <p>19세기에는 풀을 공기 없이 꽉 눌러 발효시키는 사일리지가 개발되었습니다. 김치가 젖산 발효로 겨울을 나듯, 풀도 젖산 발효로 오래 보관할 수 있게 된 것입니다. 우리나라 가을 논에서 볼 수 있는 하얀 비닐 덩어리, 이른바 '공룡알'이 바로 볏짚이나 풀로 만든 곤포 사일리지입니다. 할머니 할아버지 세대가 가마솥에 볏짚을 끓여 쇠죽을 쑤던 일이 오늘날에는 기계로 바뀐 셈입니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 조사 과제</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-4', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-4">건초와 사일리지는 각각 어떻게 만들고, 영양과 저장성 면에서 어떤 차이가 있는지 표로 비교해줘. 그리고 우리나라 논에서 볼 수 있는 하얀 '곤포 사일리지'는 무엇으로 어떻게 만드는지, 한국의 조사료 자급 현황은 어떤지 간단히 알려줘.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 곡류 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">곡류: 옥수수의 세계 정복</span>
+          <span class="chapter-hook">가장 늦게 세계 무대에 오른 곡물이 1등이 되기까지</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li><strong>대륙마다 다른 곡물 문명</strong>: 기후와 땅이 곡물을 정함</li>
+        </ul>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>곡류</th><th>시기 (대략)</th><th>발상지</th><th>지금의 사료 용도</th></tr></thead>
+            <tbody>
+              <tr><td>밀</td><td>약 1만 1천~1만 년 전</td><td>비옥한 초승달 지대</td><td>사료 곡물, 밀기울</td></tr>
+              <tr><td>보리</td><td>약 1만 년 전</td><td>비옥한 초승달 지대</td><td>소·돼지 사료</td></tr>
+              <tr><td>조·기장</td><td>약 1만~8천 년 전</td><td>중국 황허강 유역</td><td>소량 사용</td></tr>
+              <tr><td>옥수수</td><td>약 9천 년 전</td><td>멕시코</td><td><strong>사료 곡물의 1등</strong></td></tr>
+              <tr><td>벼</td><td>약 9천~7천 년 전</td><td>중국 양쯔강 유역</td><td>쌀겨(미강)</td></tr>
+              <tr><td>수수</td><td>약 5천 년 전</td><td>아프리카</td><td>옥수수 대체 곡물</td></tr>
+              <tr><td>귀리·호밀</td><td>약 4천~3천 년 전</td><td>유럽</td><td>말 사료(귀리)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <ul class="content-list">
+          <li><strong>대항해 시대 (1492년 이후)</strong>: 콜럼버스 교환으로 옥수수가 세계로 퍼짐. 조선에도 16~17세기 무렵 전래</li>
+          <li><strong>퍼진 이유는 맛이 아니라 생산량</strong>
+            <ul>
+              <li>같은 땅에서 더 많이 수확</li>
+              <li>척박한 땅, 다양한 기후에서도 잘 자람</li>
+            </ul>
+          </li>
+          <li><strong>20세기 두 번째 확산</strong>: 미국의 잡종 옥수수와 기계화 → 값싼 사료 곡물의 대명사</li>
+          <li><strong>약점</strong>
+            <ul>
+              <li>단백질의 질이 낮고 <strong>라이신</strong>이 부족함</li>
+              <li>옥수수만 먹은 유럽 농민에게 펠라그라(나이아신 결핍) 유행</li>
+              <li>→ 영양의 빈틈을 채울 <strong>짝꿍이 필요</strong></li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>세계의 곡물 지도는 기후가 그렸습니다. 비가 겨울에 오는 서아시아에서는 밀과 보리가, 여름 장마가 있는 동아시아에서는 벼와 조가, 그리고 아메리카에서는 옥수수가 문명을 일으켰습니다. 세 대륙은 수천 년 동안 서로의 곡물을 모른 채 살았습니다. 재미있게도 귀리와 호밀은 원래 밀밭에 섞여 자라던 잡초였는데, 밀이 추운 북유럽으로 퍼지자 추위에 강한 이 잡초들이 오히려 주인공이 되었습니다.</p>
+          <p>옥수수의 조상은 멕시코의 '테오신테'라는 볼품없는 야생 풀입니다. 낟알이 몇 개 달리지도 않던 이 풀을 사람들이 수천 년 동안 고르고 또 골라 지금의 커다란 옥수수로 만들었습니다. 마야 신화에는 신들이 옥수수 반죽으로 인간을 빚었다는 이야기가 전해질 만큼, 옥수수는 아메리카 문명의 생명줄이었습니다.</p>
+          <p>1492년 콜럼버스가 아메리카에 닿으면서 대륙 사이의 벽이 무너졌습니다. 옥수수는 유럽, 아프리카, 아시아로 빠르게 퍼졌고 조선에도 들어왔습니다. 하지만 옥수수가 퍼진 이유는 맛 때문이 아니었습니다. 유럽 사람들은 처음에 옥수수를 가난한 사람이나 가축이 먹는 것으로 여겼습니다. 옥수수의 진짜 무기는 같은 땅에서 훨씬 많이, 어떤 기후에서도 잘 자란다는 것이었습니다.</p>
+          <p>옥수수에도 약점은 있었습니다. 18~19세기 옥수수만 먹던 유럽 농민들 사이에 피부가 갈라지고 정신이 흐려지는 펠라그라라는 병이 퍼졌습니다. 나이아신이라는 비타민이 부족했기 때문입니다. 단백질의 질도 낮아 라이신이라는 필수 아미노산이 모자랍니다. 그리고 20세기 미국에서 잡종 옥수수와 농기계가 등장하면서 옥수수 생산량이 폭발적으로 늘었고, 넘쳐나는 옥수수는 가장 값싼 사료가 되었습니다. 이제 남은 숙제는 옥수수의 빈틈을 채워 줄 짝꿍을 찾는 것이었습니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 분석 과제</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-5', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-5">옥수수가 전 세계 가축 사료의 주원료가 된 이유를 영양, 생산량, 가격 측면에서 설명해줘. 옥수수의 영양학적 약점(특히 라이신 부족)은 무엇이고, 사료를 만들 때 이를 어떻게 보완하는지 대학교 2학년이 이해할 수 있게 간단히 알려줘.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 박류 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">박류: 찌꺼기의 반전</span>
+          <span class="chapter-hook">기름을 짜고 남은 덩어리가 최고의 단백질 사료가 되기까지</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li><strong>원래 주인공은 기름</strong>: 콩, 유채, 목화씨는 기름을 얻으려고 짰고 남은 깻묵은 찌꺼기</li>
+          <li><strong>기름을 빼니 단백질이 진해짐</strong>: 대두박 단백질 약 44~48% (옥수수 약 8%의 5배 이상)</li>
+          <li><strong>처음엔 비료</strong>
+            <ul>
+              <li>중국과 일본에서 밭의 거름으로 사용</li>
+              <li>20세기 초 만주의 콩깻묵이 일본으로 대량 수출</li>
+              <li>일제강점기 말에는 사람의 식량으로 배급되기도 함</li>
+            </ul>
+          </li>
+          <li><strong>가공 기술이 사료로 바꿈</strong>
+            <ul>
+              <li>날콩의 소화 방해 물질(트립신 저해제)을 <strong>열처리</strong>로 제거</li>
+              <li>용매 추출로 기름을 깨끗이 분리</li>
+            </ul>
+          </li>
+          <li><strong>2차 세계대전 이후 고기 소비 폭발</strong>
+            <ul>
+              <li>수요: 소득 증가, 인구 증가와 도시화, 냉장고와 슈퍼마켓</li>
+              <li>공급: 폭약 공장이 비료 공장으로 바뀌며 곡물 폭증, 배합사료 등장, 빨리 자라는 닭 개량</li>
+              <li>우리나라: 1970년 무렵 1인당 약 5kg → 2023년 약 60kg으로 쌀 소비량을 넘어섬</li>
+            </ul>
+          </li>
+          <li><strong>옥수수 + 대두박 = 영양의 짝꿍</strong>: 옥수수는 에너지, 대두박은 단백질과 라이신</li>
+        </ul>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>박류</th><th>원래 목적</th><th>사료로 쓸 때 주의점</th></tr></thead>
+            <tbody>
+              <tr><td>대두박</td><td>콩기름</td><td>반드시 열처리</td></tr>
+              <tr><td>채종박</td><td>유채기름(카놀라유)</td><td>쓴맛·독성 성분, 개량 품종 사용</td></tr>
+              <tr><td>면실박</td><td>목화씨 기름</td><td>고시폴 독성, 닭에는 제한</td></tr>
+              <tr><td>야자박</td><td>야자유</td><td>섬유가 많아 반추가축 위주</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>콩은 중국에서 수천 년 동안 길러 온 작물입니다. 사람들은 콩에서 기름을 짜 음식을 만들고 등불을 밝혔습니다. 기름을 짜고 남은 덩어리, 콩깻묵은 쓸모없는 찌꺼기였습니다. 기껏해야 밭에 뿌리는 거름으로 쓰였습니다. 20세기 초 만주는 세계 최대의 콩 생산지였고, 그곳의 콩깻묵은 배에 실려 일본의 논밭으로 팔려 갔습니다. 우리나라에서는 일제강점기 말 식량이 바닥나자 이 콩깻묵을 사람에게 배급하기도 했습니다.</p>
+          <p>그런데 이 찌꺼기에는 숨은 보물이 있었습니다. 기름이 빠져나간 만큼 단백질의 비율이 확 올라가 있었던 것입니다. 대두박의 단백질은 옥수수의 다섯 배가 넘습니다. 문제는 날콩에 소화를 방해하는 물질이 있어서 그대로 먹이면 가축이 잘 자라지 못한다는 점이었습니다. 20세기에 열을 가해 이 물질을 없애는 기술과, 용매로 기름을 깨끗이 뽑아내는 기술이 개발되면서 대두박은 마침내 질 좋은 사료가 되었습니다.</p>
+          <p>결정적인 계기는 2차 세계대전이었습니다. 전쟁이 끝나자 경제가 빠르게 성장했고, 주머니가 두둑해진 사람들은 고기를 원했습니다. 냉장고와 슈퍼마켓이 퍼지면서 고기는 오래 보관하고 멀리 팔 수 있는 상품이 되었습니다. 공급도 따라왔습니다. 전쟁 때 폭약을 만들던 공장이 질소 비료 공장으로 바뀌면서 곡물 생산이 폭발했고, 미국에서는 1948년 '미래의 닭' 대회를 열어 빨리 자라는 닭을 개량했습니다.</p>
+          <p>이렇게 해서 에너지는 넘치지만 라이신이 부족한 옥수수와, 단백질과 라이신이 풍부한 대두박이 만났습니다. 서로의 빈틈을 채워 주는 완벽한 짝꿍이었습니다. 우리나라도 1970~80년대 경제 성장과 함께 고기 소비가 급증했고, 2023년에는 1인당 육류 소비량이 약 60kg으로 쌀 소비량을 넘어섰습니다. 한때 찌꺼기였던 콩깻묵이 우리 식탁의 고기를 만들어 내고 있는 셈입니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 조사 과제</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-6', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-6">대두박은 어떤 과정을 거쳐 만들어지는지 단계별로 설명해줘. 날콩을 가축에게 그대로 먹이면 안 되는 이유와 열처리가 왜 필요한지 알려주고, 대두박 외에 채종박, 면실박 같은 다른 박류의 특징과 주의점도 표로 정리해줘.</div>
+        </div>
+      </div>
+    </details>
+
+    <!-- 보조사료 -->
+    <details class="chapter">
+      <summary>
+        <span class="arrow" aria-hidden="true"></span>
+        <span class="summary-text">
+          <span class="chapter-title">보조사료: 아주 조금이지만 꼭</span>
+          <span class="chapter-hook">쌀겨를 먹고 살아난 닭이 비타민을 알려 주었다</span>
+        </span>
+      </summary>
+      <div class="chapter-body">
+        <ul class="content-list">
+          <li><strong>미네랄</strong>
+            <ul>
+              <li>소금: 고대부터 귀한 물자 (봉급을 뜻하는 <em>salary</em>가 소금에서 왔다는 설)</li>
+              <li>인: 1669년 연금술사가 오줌을 끓이다 발견. 이후 뼈의 주성분이 칼슘과 인이라는 것이 밝혀짐</li>
+              <li>뼈를 갈아 만든 골분이 인 비료와 사료로 쓰임</li>
+              <li>셀레늄: 독인 줄 알았는데 1950년대에 아주 적은 양은 필수라는 것이 밝혀짐 → "양이 독을 만든다"</li>
+            </ul>
+          </li>
+          <li><strong>비타민</strong>
+            <ul>
+              <li>1747년 린드: 레몬과 오렌지를 먹은 선원만 괴혈병에서 회복 (비타민 C)</li>
+              <li>1890년대 에이크만: 흰쌀만 먹은 닭이 병들고 <strong>쌀겨</strong>를 먹고 회복 → 비타민 B1 발견, 1929년 노벨상</li>
+              <li>1912년 풍크: '비타민'이라는 이름 탄생</li>
+              <li>1920년대 비타민 D: 햇빛 없이 실내에서 닭을 키울 수 있게 됨 → 현대 양계의 시작</li>
+              <li>1940년대 닭 연구로 비타민 B12 발견. 함께 알려진 항생제 성장 촉진 효과는 내성균 문제로 우리나라에서 2011년부터 사료 첨가 금지</li>
+            </ul>
+          </li>
+        </ul>
+
+        <div class="chicken-note">🐔 <strong>닭에게는?</strong> 비타민과 미네랄을 섞은 프리믹스는 사료의 약 0.5~2%뿐이지만, 빠지면 닭은 제대로 자라지 못하고 다리가 휩니다. 칼슘과 함께 인을 꼭 넣어야 하는 이유입니다.</div>
+
+        <div class="story-box">
+          <span class="story-label">📖 이야기</span>
+          <p>1669년 독일 함부르크의 연금술사 헤니히 브란트는 금을 만들겠다며 엄청난 양의 오줌을 모아 끓였습니다. 금은 나오지 않았지만, 어둠 속에서 푸르스름하게 빛나는 이상한 물질이 나왔습니다. 그리스어로 '빛을 가져오는 것'이라는 뜻의 인(phosphorus)입니다. 그로부터 약 100년 뒤, 과학자들은 뼈의 주성분이 바로 칼슘과 인이라는 것을 알아냈습니다. 이후 동물 뼈를 갈아 만든 골분은 밭의 비료와 가축의 사료가 되었습니다.</p>
+          <p>비타민의 이야기는 바다에서 시작됩니다. 대항해 시대, 긴 항해에 나선 선원들은 잇몸에서 피가 나고 이가 빠지며 죽어 갔습니다. 1747년 영국 해군 의사 제임스 린드는 괴혈병에 걸린 선원 열두 명을 여섯 무리로 나누어 서로 다른 음식을 먹여 보았습니다. 레몬과 오렌지를 먹은 무리만 눈에 띄게 회복되었습니다. 원인이 무엇인지는 몰랐지만, 무언가가 빠지면 병이 생긴다는 단서를 얻은 것입니다.</p>
+          <p>결정적인 장면에는 닭이 등장합니다. 1890년대 네덜란드의 의사 크리스티안 에이크만은 인도네시아 자바섬에서 각기병의 원인을 찾고 있었습니다. 어느 날 병원에서 기르던 닭들이 다리를 비틀거리며 쓰러지기 시작했습니다. 알고 보니 닭들은 환자에게 주고 남은 흰쌀을 먹고 있었습니다. 그런데 새로 온 관리인이 "군대 쌀을 닭에게 줄 수 없다"며 값싼 현미로 바꾸자 닭들이 거짓말처럼 회복되었습니다. 쌀을 깎을 때 벗겨지는 껍질, 즉 쌀겨에 생명에 꼭 필요한 무언가가 들어 있었던 것입니다. 이것이 비타민 B1이었고, 에이크만은 이 공로로 1929년 노벨상을 받았습니다. 1912년 폴란드의 화학자 카지미르 풍크는 이런 물질들에 '생명에 필요한 아민'이라는 뜻으로 비타민이라는 이름을 붙였습니다.</p>
+          <p>1920년대 비타민 D의 발견은 양계의 모습을 완전히 바꿔 놓았습니다. 그전까지 닭은 햇빛을 받아야 뼈가 튼튼해졌기 때문에 마당에서 놓아길러야 했습니다. 사료에 비타민 D를 넣을 수 있게 되자 수천, 수만 마리의 닭을 실내에서 기를 수 있게 되었습니다. 현대 양계 산업이 시작된 순간입니다.</p>
+          <p>미네랄 중에는 반전의 주인공도 있습니다. 셀레늄은 오랫동안 가축을 중독시키는 독으로만 알려져 있었습니다. 그런데 1950년대에 아주 적은 양은 꼭 필요하고, 부족하면 근육이 하얗게 변하는 병이 생긴다는 것이 밝혀졌습니다. 같은 물질이 양에 따라 독도 되고 약도 되는 것입니다. 보조사료는 사료 전체에서 아주 작은 부분을 차지하지만, 수백 년에 걸친 이 발견들이 있었기에 오늘날 닭이 6주 만에 건강하게 자랄 수 있게 되었습니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">💡 케이스 스터디</span>
+            <button class="copy-button" type="button" onclick="copyToClipboard('snippet-7', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-7">에이크만의 닭 실험이 비타민 B1 발견으로 이어진 과정을 이야기처럼 설명해줘. 그리고 육계 사료에 칼슘과 인을 함께 넣어야 하는 이유, 칼슘과 인의 적정 비율, 각각이 부족하면 닭에게 어떤 문제가 생기는지 대학교 2학년이 이해할 수 있게 간단히 알려줘.</div>
+        </div>
+      </div>
+    </details>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>가축사양학 강의 자료</p>
+      <p class="footer-note">사료 원료의 역사 · 더 궁금한 내용은 프롬프트를 복사해 AI에게 물어보세요</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyToClipboard(elementId, button) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.innerText;
+        button.innerText = '복사됨!';
+        setTimeout(() => { button.innerText = originalText; }, 2000);
+      });
+    }
+    function toggleAll(open) {
+      document.querySelectorAll('details.chapter').forEach(d => { d.open = open; });
+    }
+
+    /* 인쇄할 때 토글을 모두 펼치고, 끝나면 원래 상태로 되돌림 */
+    let savedOpenStates = null;
+    function expandForPrint() {
+      const chapters = document.querySelectorAll('details.chapter');
+      if (savedOpenStates === null) {
+        savedOpenStates = Array.from(chapters, d => d.open);
+      }
+      chapters.forEach(d => { d.open = true; });
+    }
+    function restoreAfterPrint() {
+      if (savedOpenStates === null) return;
+      document.querySelectorAll('details.chapter').forEach((d, i) => {
+        d.open = savedOpenStates[i] ?? false;
+      });
+      savedOpenStates = null;
+    }
+    function printAll() {
+      expandForPrint();
+      window.print();
+    }
+    window.addEventListener('beforeprint', expandForPrint);
+    window.addEventListener('afterprint', restoreAfterPrint);
+  </script>
+</body>
+</html>

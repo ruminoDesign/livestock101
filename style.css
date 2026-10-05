@@ -1160,3 +1160,19 @@ body {
     border-color: var(--primary-green);
   }
 }
+
+.padlet-link {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.4rem 1.2rem;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.padlet-link:hover,
+.padlet-link:focus-visible {
+  background: rgba(255, 255, 255, 0.15);
+}

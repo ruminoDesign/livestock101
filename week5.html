@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가축사양학 - 제5주차 강의</title>
+  <style>
+    :root {
+      --primary-green: #2D5016;
+      --accent-brown: #8B7355;
+      --light-bg: #FAFAF8;
+      --white: #FFFFFF;
+      --dark-text: #2C2C2C;
+      --muted-text: #5E5E5A;
+      --light-gray: #F5F5F3;
+      --border-gray: #E8E8E6;
+      --success: #4A7C3F;
+      --soft-green: #EEF3E8;
+      --soft-brown: #F4EFE8;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+      --spacing-xs: 0.5rem;
+      --spacing-sm: 1rem;
+      --spacing-md: 1.5rem;
+      --spacing-lg: 2rem;
+      --spacing-xl: 3rem;
+      --radius: 14px;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary-green: #9CC57F;
+        --accent-brown: #C9AE8C;
+        --light-bg: #1A1C18;
+        --white: #23261F;
+        --dark-text: #E8E8E3;
+        --muted-text: #B3B3AC;
+        --light-gray: #2B2E27;
+        --border-gray: #3A3D35;
+        --success: #8FBF7E;
+        --soft-green: #27301F;
+        --soft-brown: #302A22;
+      }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--light-bg);
+      color: var(--dark-text);
+      line-height: 1.75;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* 헤더 */
+    .header {
+      background: #2D5016;
+      color: #FFFFFF;
+      text-align: center;
+      padding: var(--spacing-xl) var(--spacing-sm) var(--spacing-lg);
+    }
+    .title { font-family: var(--font-serif); font-size: 2rem; letter-spacing: -0.01em; }
+    .subtitle { margin-top: 0.35rem; opacity: 0.88; font-size: 1.05rem; }
+    .week-label {
+      display: inline-block;
+      margin-bottom: 0.6rem;
+      padding: 0.2rem 0.85rem;
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: 999px;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* 상단 도구 막대 */
+    .toolbar {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: var(--spacing-md) 16px 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--spacing-sm);
+      align-items: center;
+      justify-content: space-between;
+    }
+    .toolbar-note { font-size: 0.9rem; color: var(--muted-text); }
+    .print-button {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 999px;
+      padding: 0.7rem 1.6rem;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: var(--font-sans);
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+    .print-button:hover { opacity: 0.88; }
+    .print-button:focus-visible, .copy-button:focus-visible {
+      outline: 3px solid var(--accent-brown);
+      outline-offset: 2px;
+    }
+
+    /* 카드 목차 */
+    .card-index {
+      max-width: 860px;
+      margin: var(--spacing-md) auto 0;
+      padding: 0 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .card-index a {
+      font-size: 0.85rem;
+      color: var(--primary-green);
+      text-decoration: none;
+      border: 1px solid var(--border-gray);
+      background: var(--white);
+      border-radius: 999px;
+      padding: 0.25rem 0.8rem;
+    }
+    .card-index a:hover { border-color: var(--primary-green); }
+
+    /* 카드 뉴스 */
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: var(--spacing-lg) 16px var(--spacing-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-xl);
+    }
+    .lecture-section {
+      background: var(--white);
+      border: 1px solid var(--border-gray);
+      border-radius: var(--radius);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+      overflow: hidden;
+      scroll-margin-top: 16px;
+    }
+    .section-header {
+      background: #2D5016;
+      color: #FFFFFF;
+      padding: var(--spacing-md) var(--spacing-lg);
+    }
+    .card-number {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      padding: 0.15rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.16);
+      margin-bottom: 0.5rem;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 1.55rem;
+      line-height: 1.35;
+    }
+    .card-body { padding: var(--spacing-lg); }
+
+    .section-description {
+      font-size: 0.98rem;
+      color: var(--muted-text);
+      border-left: 4px solid var(--accent-brown);
+      padding-left: var(--spacing-sm);
+      margin-bottom: var(--spacing-md);
+    }
+    .section-content { margin-bottom: var(--spacing-md); }
+    .sub-heading {
+      font-size: 1.05rem;
+      color: var(--primary-green);
+      margin: var(--spacing-md) 0 var(--spacing-xs);
+    }
+
+    .content-list { padding-left: 1.2rem; }
+    .content-list li { margin-bottom: 0.35rem; }
+
+    /* 정의 박스 */
+    .definition-box {
+      background: var(--soft-green);
+      border-radius: 10px;
+      padding: var(--spacing-sm) var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+    .definition-box h3 { font-size: 1.02rem; color: var(--primary-green); margin-bottom: 0.25rem; }
+    .definition-box .formula {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--dark-text);
+    }
+
+    /* 에너지 흐름 */
+    .energy-flow { display: flex; flex-direction: column; align-items: stretch; gap: 0; }
+    .flow-step {
+      display: grid;
+      grid-template-columns: 76px 1fr;
+      gap: var(--spacing-sm);
+      align-items: center;
+      background: var(--light-gray);
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      padding: 0.75rem var(--spacing-sm);
+    }
+    .flow-step .code {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--primary-green);
+      text-align: center;
+    }
+    .flow-step h4 { font-size: 0.98rem; }
+    .flow-step p { font-size: 0.9rem; color: var(--muted-text); }
+    .flow-step.final { background: var(--soft-green); border-color: var(--primary-green); }
+    .flow-loss {
+      position: relative;
+      margin: 0 0 0 38px;
+      padding: 0.55rem 0 0.55rem 1.4rem;
+      border-left: 2px dashed var(--accent-brown);
+      font-size: 0.88rem;
+      color: var(--accent-brown);
+    }
+    .flow-loss strong { color: var(--accent-brown); }
+
+    /* 그리드 카드 */
+    .nutrient-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--spacing-sm);
+    }
+    .nutrient-grid.three { grid-template-columns: repeat(3, 1fr); }
+    .nutrient-card {
+      background: var(--light-gray);
+      border: 1px solid var(--border-gray);
+      border-top: 4px solid var(--primary-green);
+      border-radius: 10px;
+      padding: var(--spacing-sm);
+    }
+    .nutrient-card h4 { font-size: 1rem; color: var(--primary-green); margin-bottom: 0.2rem; }
+    .nutrient-card p { font-size: 0.9rem; }
+
+    /* 비교 박스 */
+    .comparison-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-sm);
+    }
+    .comparison-item {
+      border-radius: 10px;
+      padding: var(--spacing-sm) var(--spacing-md);
+      border: 1px solid var(--border-gray);
+    }
+    .comparison-item.left { background: var(--soft-green); }
+    .comparison-item.right { background: var(--soft-brown); }
+    .comparison-item h3 { font-size: 1.02rem; margin-bottom: 0.35rem; }
+    .comparison-item.left h3 { color: var(--primary-green); }
+    .comparison-item.right h3 { color: var(--accent-brown); }
+    .comparison-item ul { padding-left: 1.1rem; font-size: 0.92rem; }
+    .comparison-item li { margin-bottom: 0.2rem; }
+
+    /* 표 */
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      min-width: 520px;
+    }
+    .data-table th, .data-table td {
+      border: 1px solid var(--border-gray);
+      padding: 0.5rem 0.6rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    .data-table thead th {
+      background: var(--soft-green);
+      color: var(--primary-green);
+      font-weight: 700;
+    }
+    .data-table tbody th { background: var(--light-gray); font-weight: 600; white-space: nowrap; }
+    .table-note { font-size: 0.8rem; color: var(--muted-text); margin-top: 0.4rem; }
+
+    /* 타임라인 */
+    .priority-timeline { display: flex; flex-direction: column; gap: 0.6rem; }
+    .priority-item {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: var(--spacing-sm);
+      align-items: start;
+      padding: 0.7rem var(--spacing-sm);
+      border-radius: 10px;
+      background: var(--light-gray);
+      border: 1px solid var(--border-gray);
+    }
+    .priority-number {
+      font-family: var(--font-serif);
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--white);
+      background: var(--accent-brown);
+      border-radius: 8px;
+      text-align: center;
+      padding: 0.3rem 0.2rem;
+    }
+    .priority-item h4 { font-size: 0.98rem; }
+    .priority-item p { font-size: 0.88rem; color: var(--muted-text); }
+
+    /* 인사이트 */
+    .insight-box {
+      background: var(--soft-brown);
+      border-left: 4px solid var(--accent-brown);
+      border-radius: 0 10px 10px 0;
+      padding: var(--spacing-sm) var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      font-size: 0.95rem;
+    }
+    .insight-box strong { color: var(--accent-brown); }
+
+    /* 자세한 설명 */
+    .detail-box {
+      border: 1px solid var(--border-gray);
+      border-radius: 10px;
+      padding: var(--spacing-sm) var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+      background: var(--white);
+    }
+    .detail-box .detail-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--primary-green);
+      margin-bottom: 0.35rem;
+    }
+    .detail-box p { font-size: 0.93rem; margin-bottom: 0.55rem; }
+    .detail-box p:last-child { margin-bottom: 0; }
+
+    /* 스니핏 */
+    .snippet-box {
+      border: 1px solid var(--primary-green);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .snippet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--spacing-sm);
+      background: var(--soft-green);
+      padding: 0.55rem var(--spacing-sm);
+    }
+    .snippet-label { font-weight: 700; color: var(--primary-green); font-size: 0.95rem; }
+    .copy-button {
+      background: var(--primary-green);
+      color: var(--white);
+      border: none;
+      border-radius: 6px;
+      padding: 0.3rem 0.9rem;
+      font-size: 0.85rem;
+      font-family: var(--font-sans);
+      cursor: pointer;
+    }
+    .snippet-content {
+      padding: var(--spacing-sm);
+      font-size: 0.92rem;
+      white-space: pre-line;
+      background: var(--white);
+    }
+
+    /* 푸터 */
+    .footer {
+      background: #2D5016;
+      color: #FFFFFF;
+      text-align: center;
+      padding: var(--spacing-lg) var(--spacing-sm);
+    }
+    .footer-note { opacity: 0.8; font-size: 0.9rem; margin-top: 0.2rem; }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .card-body { padding: var(--spacing-md); }
+      .section-header { padding: var(--spacing-sm) var(--spacing-md); }
+      .section-title { font-size: 1.3rem; }
+      .comparison-box { grid-template-columns: 1fr; }
+      .nutrient-grid.three { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 480px) {
+      .title { font-size: 1.6rem; }
+      .nutrient-grid, .nutrient-grid.three { grid-template-columns: 1fr; }
+      .flow-step { grid-template-columns: 56px 1fr; }
+      .priority-item { grid-template-columns: 1fr; gap: 0.35rem; }
+      .priority-number { justify-self: start; padding: 0.2rem 0.7rem; }
+      .toolbar { justify-content: center; text-align: center; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; scroll-behavior: auto !important; }
+    }
+
+    /* 인쇄: 카드 한 장 = 한 페이지 */
+    @page { size: A4; margin: 12mm; }
+    @media print {
+      :root {
+        --primary-green: #2D5016;
+        --accent-brown: #8B7355;
+        --light-bg: #FFFFFF;
+        --white: #FFFFFF;
+        --dark-text: #222222;
+        --muted-text: #4A4A46;
+        --light-gray: #F5F5F3;
+        --border-gray: #D9D9D5;
+        --soft-green: #EEF3E8;
+        --soft-brown: #F4EFE8;
+      }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: #FFFFFF; font-size: 9.5pt; line-height: 1.55; }
+      .header, .toolbar, .card-index, .footer, .copy-button { display: none !important; }
+      .container { max-width: none; padding: 0; gap: 0; display: block; }
+      .lecture-section {
+        box-shadow: none;
+        border: 1px solid #D9D9D5;
+        break-after: page;
+        page-break-after: always;
+      }
+      .lecture-section:last-child { break-after: auto; page-break-after: auto; }
+      .section-header { padding: 10px 16px; }
+      .section-title { font-size: 15pt; }
+      .card-body { padding: 12px 16px; }
+      .section-description, .detail-box p, .snippet-content, .insight-box { font-size: 9pt; }
+      .data-table { font-size: 8pt; min-width: 0; }
+      .data-table th, .data-table td { padding: 3px 5px; }
+      .section-content, .definition-box, .insight-box, .detail-box { margin-bottom: 8px; }
+      .nutrient-grid, .comparison-box { gap: 6px; }
+      .nutrient-card, .comparison-item, .flow-step, .priority-item { padding: 6px 10px; }
+      .flow-loss { padding: 3px 0 3px 1rem; }
+      .priority-timeline { gap: 4px; }
+      .table-wrap { overflow: visible; }
+      .snippet-box, .detail-box, .table-wrap, .nutrient-card, .comparison-item { break-inside: avoid; }
+      body { font-size: 9pt; line-height: 1.45; }
+      .card-number { margin-bottom: 2px; font-size: 7pt; }
+      .section-description { margin-bottom: 8px; }
+      .sub-heading { margin: 6px 0 2px; font-size: 10pt; }
+      .content-list li { margin-bottom: 1px; }
+      .nutrient-grid { grid-template-columns: repeat(4, 1fr); }
+      .nutrient-grid.three { grid-template-columns: repeat(3, 1fr); }
+      .nutrient-card h4, .comparison-item h3, .definition-box h3 { font-size: 9.5pt; }
+      .nutrient-card p, .comparison-item ul, .priority-item p, .flow-step p { font-size: 8.5pt; }
+      .comparison-box { grid-template-columns: 1fr 1fr; }
+      .priority-timeline { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+      .priority-item { grid-template-columns: 70px 1fr; gap: 6px; }
+      .priority-number { font-size: 8pt; padding: 2px; }
+      .priority-item h4 { font-size: 9pt; }
+      .detail-box p { margin-bottom: 4px; }
+      .definition-box { padding: 6px 12px; }
+      .definition-box .formula { font-size: 10.5pt; }
+      .snippet-header { padding: 4px 10px; }
+      .snippet-content { padding: 6px 10px; font-size: 8.5pt; }
+      .insight-box { padding: 6px 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <span class="week-label">제5주차</span>
+      <h1 class="title">가축사양학</h1>
+      <p class="subtitle">사료 에너지의 구성과 영양소 요구량</p>
+    </div>
+  </header>
+
+  <div class="toolbar">
+    <p class="toolbar-note">카드 9장 · 출력 시 카드 한 장이 한 페이지로 나뉩니다</p>
+    <button class="print-button" onclick="window.print()">전체 출력하기</button>
+  </div>
+
+  <nav class="card-index" aria-label="카드 목차">
+    <a href="#card-1">01 에너지의 흐름</a>
+    <a href="#card-2">02 정미에너지</a>
+    <a href="#card-3">03 요구량의 정의</a>
+    <a href="#card-4">04 사양표준</a>
+    <a href="#card-5">05 에너지 요구량</a>
+    <a href="#card-6">06 반추가축 단백질</a>
+    <a href="#card-7">07 단위가축 단백질</a>
+    <a href="#card-8">08 무기물 요구량</a>
+    <a href="#card-9">09 종합 정리</a>
+  </nav>
+
+  <main class="container">
+
+    <!-- CARD 01 -->
+    <section class="lecture-section" id="card-1">
+      <div class="section-header">
+        <span class="card-number">CARD 01</span>
+        <h2 class="section-title">1. 사료 에너지의 흐름: GE에서 NE까지</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          사료를 완전히 태웠을 때 나오는 에너지가 모두 가축에게 쓰이는 것은 아닙니다. 소화되지 않고 빠져나가는 에너지, 오줌과 가스로 나가는 에너지, 대사 과정에서 열로 사라지는 에너지를 단계별로 빼 나가면 실제로 쓸 수 있는 에너지만 남습니다.
+        </p>
+
+        <div class="section-content">
+          <div class="energy-flow">
+            <div class="flow-step">
+              <div class="code">GE</div>
+              <div>
+                <h4>총에너지 (Gross Energy)</h4>
+                <p>봄베열량계로 사료를 완전 연소해 측정. 탄수화물 약 4.2, 단백질 약 5.6, 지방 약 9.4 kcal/g</p>
+              </div>
+            </div>
+            <div class="flow-loss"><strong>손실</strong> 분 에너지: 소화되지 않고 분으로 배설되는 에너지</div>
+            <div class="flow-step">
+              <div class="code">DE</div>
+              <div>
+                <h4>가소화에너지 (Digestible Energy)</h4>
+                <p>DE = GE − 분 에너지</p>
+              </div>
+            </div>
+            <div class="flow-loss"><strong>손실</strong> 뇨 에너지 + 가스 에너지(메탄)</div>
+            <div class="flow-step">
+              <div class="code">ME</div>
+              <div>
+                <h4>대사에너지 (Metabolizable Energy)</h4>
+                <p>ME = DE − 뇨 에너지 − 메탄 에너지</p>
+              </div>
+            </div>
+            <div class="flow-loss"><strong>손실</strong> 열증가(HI): 소화·발효·영양소 대사 과정에서 열로 발산</div>
+            <div class="flow-step final">
+              <div class="code">NE</div>
+              <div>
+                <h4>정미에너지 (Net Energy)</h4>
+                <p>NE = ME − 열증가. 유지와 생산(증체·비유·번식)에 실제로 쓰이는 에너지</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 단계가 내려갈수록 측정은 어려워지지만 가축이 실제로 쓰는 에너지에 가까워집니다. 그래서 정밀한 사양표준일수록 ME나 NE를 사용합니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>분 에너지는 사료 중 소화되지 않은 부분뿐 아니라 장에서 떨어져 나온 세포, 소화효소 같은 대사성 분 성분도 포함합니다. 섬유가 많은 조사료일수록 분 에너지 손실이 커서 GE 대비 DE 비율이 낮습니다.</p>
+          <p>반추가축은 반추위 발효 과정에서 메탄이 만들어져 사료 총에너지의 약 6% 안팎(사료에 따라 2~12%)이 가스로 손실됩니다. 반추가축에서 ME는 대략 DE의 82% 수준으로 계산합니다. 가금은 분과 뇨가 총배설강으로 함께 배설되어 DE를 따로 측정하기 어렵기 때문에 처음부터 ME, 특히 질소 보정 대사에너지(AMEn)를 사용합니다.</p>
+          <p>열증가는 단백질이나 섬유가 많은 사료에서 커집니다. 더운 날씨에는 열증가가 고온 스트레스를 키우는 부담이 되고, 추운 날씨에는 체온 유지에 일부 활용되기도 합니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-1', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-1">옥수수 1kg의 총에너지(GE)를 약 4.4 Mcal로 가정하고, 한우와 육계에서 DE, ME, NE로 단계적으로 줄어드는 과정을 표로 정리해 줘. 각 단계에서 손실되는 에너지(분, 뇨, 메탄, 열증가)가 무엇이며 왜 반추가축과 가금에서 손실 비율이 다른지 설명하고, 한국가축사양표준에서 축종마다 다른 에너지 단위를 쓰는 이유도 덧붙여 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 02 -->
+    <section class="lecture-section" id="card-2">
+      <div class="section-header">
+        <span class="card-number">CARD 02</span>
+        <h2 class="section-title">2. 정미에너지의 분할과 축종별 에너지 체계</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          정미에너지(NE)는 쓰임새에 따라 다시 나뉩니다. 생명 유지에 쓰이는 부분과 고기, 우유, 태아를 만드는 데 쓰이는 부분은 ME에서 전환되는 효율이 서로 달라 따로 계산합니다.
+        </p>
+
+        <div class="section-content">
+          <div class="nutrient-grid">
+            <div class="nutrient-card">
+              <h4>NEm (유지)</h4>
+              <p>체온 유지, 호흡, 혈액순환 등 생명 유지에 필요한 에너지. 생산이 없어도 반드시 필요</p>
+            </div>
+            <div class="nutrient-card">
+              <h4>NEg (증체)</h4>
+              <p>근육과 지방을 축적해 체중을 늘리는 데 쓰이는 에너지. 육성우·비육우에서 중요</p>
+            </div>
+            <div class="nutrient-card">
+              <h4>NEl (비유)</h4>
+              <p>우유를 생산하는 데 쓰이는 에너지. 유량과 유지방 함량에 따라 달라짐</p>
+            </div>
+            <div class="nutrient-card">
+              <h4>NEr (번식·임신)</h4>
+              <p>태아와 태반 등 임신 산물의 성장에 쓰이는 에너지. 임신 후기에 급격히 증가</p>
+            </div>
+          </div>
+
+          <h3 class="sub-heading">ME가 NE로 바뀌는 효율</h3>
+          <ul class="content-list">
+            <li>유지(km): 약 0.6~0.7</li>
+            <li>비유(kl): 약 0.6~0.65</li>
+            <li>증체(kg): 약 0.3~0.5로 가장 낮음</li>
+          </ul>
+        </div>
+
+        <div class="comparison-box section-content">
+          <div class="comparison-item left">
+            <h3>반추가축</h3>
+            <ul>
+              <li>메탄·열증가 손실이 커서 NE 또는 ME로 정밀하게 평가</li>
+              <li>한우: TDN과 정미에너지(유지·증체)</li>
+              <li>젖소: 4차 개정에서 NE에서 ME 단위로 변경</li>
+            </ul>
+          </div>
+          <div class="comparison-item right">
+            <h3>단위가축</h3>
+            <ul>
+              <li>메탄 손실이 적어 DE와 ME의 차이가 작음</li>
+              <li>돼지: ME 중심, NE 체계도 활용</li>
+              <li>가금: 분뇨가 함께 배설되어 ME(AMEn) 사용</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 같은 사료라도 유지용으로 계산한 NE 값이 증체용보다 큽니다. 증체 효율이 낮기 때문에 비육 사료는 에너지 농도를 높여야 합니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>TDN(가소화 영양소 총량)은 가소화 조단백질, 가소화 조섬유, 가소화 가용무질소물, 가소화 조지방×2.25를 더한 값으로, 오래전부터 쓰인 에너지 지표입니다. TDN 1kg은 가소화에너지 약 4.4 Mcal에 해당합니다. 계산이 쉬워 지금도 한우 사료 설계에 널리 쓰이지만, 메탄과 열증가 손실을 반영하지 못한다는 한계가 있습니다.</p>
+          <p>증체 효율이 낮은 이유는 체지방과 체단백질을 합성하는 데 많은 에너지가 소모되기 때문입니다. 특히 단백질 합성은 분해와 재합성이 반복되어 에너지 비용이 큽니다. 비유는 유지와 비슷한 효율을 보여 젖소에서는 유지와 비유를 같은 단위로 계산하는 방식이 쓰여 왔습니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-2', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-2">정미에너지(NE)가 NEm, NEg, NEl, NEr로 나뉘는 이유를 설명해 줘. ME가 각 용도의 NE로 전환되는 효율(km, kg, kl)이 왜 서로 다른지 생리적으로 설명하고, 같은 사료의 NEm과 NEg 값이 다른 이유를 예시로 보여 줘. 또한 TDN 체계의 장점과 한계를 정리하고, 한국가축사양표준 4차 개정에서 젖소의 에너지 단위가 정미에너지에서 대사에너지로 바뀐 배경도 설명해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 03 -->
+    <section class="lecture-section" id="card-3">
+      <div class="section-header">
+        <span class="card-number">CARD 03</span>
+        <h2 class="section-title">3. 영양소 요구량의 정의: 사람의 기초대사량과 비교하기</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          사람이 기초대사량에 활동량을 더해 하루에 필요한 열량을 정하듯, 가축도 생명 유지에 필요한 양에 생산에 필요한 양을 더해 영양소 요구량을 정합니다. 다만 가축은 고기, 우유, 알을 만들어야 하므로 생산요구량이 훨씬 큰 비중을 차지합니다.
+        </p>
+
+        <div class="definition-box">
+          <h3>영양소 요구량</h3>
+          <p class="formula">요구량 = 유지요구량 + 생산요구량</p>
+          <p>가축이 건강을 유지하면서 목표한 생산을 하는 데 필요한 영양소의 최소량</p>
+        </div>
+
+        <div class="section-content table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>구분</th><th>사람</th><th>가축</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>기초</th><td>기초대사량(BMR): 안정·공복 상태의 최소 에너지</td><td>절식대사량: 절식·안정 상태의 열 생산량</td></tr>
+              <tr><th>유지</th><td>기초대사량 + 일상 활동</td><td>유지요구량: 기초대사 + 기본 활동, 체온 조절</td></tr>
+              <tr><th>추가</th><td>운동, 임신·수유 시 추가</td><td>생산요구량: 성장, 비유, 임신, 산란</td></tr>
+              <tr><th>계산 기준</th><td>체중·키·나이(Harris-Benedict 식)</td><td>대사체중(BW<sup>0.75</sup>)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading">대사체중과 Kleiber 법칙</h3>
+        <ul class="content-list section-content">
+          <li>포유동물의 기초대사량은 체중이 아니라 체중의 0.75제곱(BW<sup>0.75</sup>)에 비례</li>
+          <li>기초대사량 ≈ 70 kcal × BW<sup>0.75</sup> (하루 기준)</li>
+          <li>체중 70kg 사람: 70<sup>0.75</sup> ≈ 24.2 → 약 1,700 kcal/일</li>
+          <li>체중 70kg 육성돈: 기초대사는 비슷하지만 성장을 위해 하루 대사에너지 약 7,000~8,000 kcal 섭취</li>
+        </ul>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 요구량은 최소 필요량이고, 실제 급여량은 사료 품질 차이와 개체 차이를 고려해 안전율을 더한 값입니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>체중이 커질수록 체중 1kg당 대사량은 줄어듭니다. 생쥐는 체중당 대사가 매우 빠르고 코끼리는 느립니다. 이 차이를 보정하기 위해 체중의 0.75제곱을 쓰면 생쥐부터 소까지 비슷한 기준으로 유지 에너지를 비교할 수 있습니다. 이것이 Kleiber 법칙이며, 사양표준의 유지요구량 대부분이 BW<sup>0.75</sup>를 기준으로 계산됩니다.</p>
+          <p>영양소 요구량은 체중뿐 아니라 성장 속도, 생산 수준(산유량, 산란율), 환경 온도, 품종, 성별, 건강 상태에 따라 달라집니다. 예를 들어 추운 날씨에는 체온 유지를 위해 유지요구량이 늘어나고, 거세우와 수소는 같은 체중이라도 체조성이 달라 증체에 필요한 에너지가 다릅니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-3', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-3">체중 70kg 성인 남성의 기초대사량을 Harris-Benedict 식으로 계산하고, 같은 체중의 육성돈과 한우 송아지의 유지 에너지 요구량을 대사체중(BW^0.75)으로 비교해 줘. 사람의 '기초대사량 + 활동대사'와 가축의 '유지요구량 + 생산요구량' 개념이 어떻게 대응되는지 표로 정리하고, 가축에서 생산요구량이 특히 중요한 이유를 설명해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 04 -->
+    <section class="lecture-section" id="card-4">
+      <div class="section-header">
+        <span class="card-number">CARD 04</span>
+        <h2 class="section-title">4. 사양표준의 역사와 종류</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          사양표준은 가축에게 어떤 영양소를 얼마나 먹여야 하는지를 정리한 기준입니다. 처음에는 건초를 기준으로 사료 가치를 비교하는 수준이었지만, 소화율과 에너지 이용 효율을 반영하며 점점 정밀해졌습니다.
+        </p>
+
+        <div class="section-content">
+          <div class="priority-timeline">
+            <div class="priority-item">
+              <div class="priority-number">1810</div>
+              <div><h4>Thaer 건초가</h4><p>좋은 건초를 기준(100)으로 다른 사료의 가치를 비교</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">1859</div>
+              <div><h4>Grouven</h4><p>사료 중 조성분 함량으로 최초의 사양표준 제시</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">1864~1896</div>
+              <div><h4>Wolff · Lehmann</h4><p>가소화 영양소 개념 도입, 생산 수준별 요구량으로 확장</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">1905</div>
+              <div><h4>Kellner 전분가</h4><p>사료의 지방 축적 능력을 전분과 비교하는 정미 개념의 출발</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">1917</div>
+              <div><h4>Armsby 정미에너지</h4><p>열량 측정으로 정미에너지 체계 확립</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">20세기 초</div>
+              <div><h4>Morrison</h4><p>TDN을 기준으로 한 실용 사양표준 보급</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">1944~</div>
+              <div><h4>NRC</h4><p>미국 국립연구회의가 축종별 영양소 요구량 발간, 현재 NASEM으로 이어짐</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-content">
+          <div class="nutrient-grid three">
+            <div class="nutrient-card"><h4>NRC · NASEM</h4><p>미국. 세계에서 가장 널리 참고</p></div>
+            <div class="nutrient-card"><h4>ARC · AFRC</h4><p>영국. 대사단백질 체계 발전</p></div>
+            <div class="nutrient-card"><h4>INRA</h4><p>프랑스. 고유의 에너지·단백질 단위</p></div>
+            <div class="nutrient-card"><h4>CSIRO</h4><p>호주. 방목 가축 중심</p></div>
+            <div class="nutrient-card"><h4>일본사양표준</h4><p>일본 화우 등 자국 품종 반영</p></div>
+            <div class="nutrient-card"><h4>한국가축사양표준</h4><p>2002년 제정, 5년마다 개정</p></div>
+          </div>
+        </div>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 한국가축사양표준은 2002년 한우·젖소·돼지·가금 4개 축종으로 제정된 뒤 2007, 2012, 2017년에 개정되었고, 현재 최신판은 2022년 4차 개정판입니다. 4차 개정에서 염소가 처음 추가되었습니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>해외 사양표준을 그대로 쓰기 어려운 이유는 품종, 사료원료, 기후, 사육 목표가 다르기 때문입니다. 한우는 근내지방(마블링)을 목표로 장기 비육하는 고유 품종이고, 우리나라는 사료원료 대부분을 수입하며 여름철 고온다습한 환경을 갖고 있습니다.</p>
+          <p>4차 개정판은 탄소중립과 국제 곡물가 변동에 대응해 정밀 급여를 강조했습니다. 한우는 고온·저온 스트레스 지수에 따른 사양관리 기준과 조정된 일당증체량 범위가, 젖소는 국내 고유의 섭취량·에너지 모형과 대사에너지 단위가, 돼지는 질소와 온실가스 저감을 위한 단백질 조절과 다산성 모돈 관리가, 가금은 가소화 아미노산 기준과 산란계 동물복지 사양관리가 반영되었습니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-4', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-4">한국가축사양표준 4차 개정판(2022)과 미국 NRC/NASEM 사양표준을 비교해 줘. 비교 축종은 한우 비육우와 미국 육우로 하고, 에너지 단위, 단백질 평가 체계, 일당증체량 기준, 환경(고온 스트레스·온실가스) 반영 여부를 표로 정리해 줘. 한국이 독자적인 사양표준을 만든 배경과 4차 개정의 주요 변화도 함께 설명해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 05 -->
+    <section class="lecture-section" id="card-5">
+      <div class="section-header">
+        <span class="card-number">CARD 05</span>
+        <h2 class="section-title">5. 축종별·성장단계별 에너지 요구량</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          에너지 요구량은 축종과 성장단계, 생산 목적에 따라 크게 달라집니다. 어릴 때는 근육과 뼈를 만들고, 자라면서 지방 축적과 우유·알 생산으로 에너지의 쓰임새가 바뀝니다.
+        </p>
+
+        <div class="section-content table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>축종</th><th>성장단계</th><th>에너지 기준</th><th>요구 경향</th></tr>
+            </thead>
+            <tbody>
+              <tr><th rowspan="3">한우</th><td>송아지·육성기</td><td>TDN 약 68~70% (건물 기준)</td><td>뼈·근육 성장, 조사료로 반추위 발달</td></tr>
+              <tr><td>비육 전기</td><td>TDN 약 70~72%</td><td>증체 극대화, 농후사료 비율 증가</td></tr>
+              <tr><td>비육 후기</td><td>TDN 약 72~75%</td><td>근내지방 축적, 에너지 농도 최고</td></tr>
+              <tr><th rowspan="2">젖소</th><td>비유 초기</td><td>ME 기준, 고에너지</td><td>섭취량보다 요구량이 커서 체지방 동원</td></tr>
+              <tr><td>건유기</td><td>ME 기준, 저에너지</td><td>과비 방지, 분만 준비</td></tr>
+              <tr><th rowspan="3">돼지</th><td>이유자돈</td><td>ME 약 3,300 kcal/kg</td><td>섭취량이 적어 고농도 사료 필요</td></tr>
+              <tr><td>육성·비육돈</td><td>ME 약 3,250~3,300 kcal/kg</td><td>체중이 늘면서 하루 섭취 에너지 증가</td></tr>
+              <tr><td>임신·포유모돈</td><td>ME 약 3,250~3,300 kcal/kg</td><td>임신기 제한급여, 포유기 최대 섭취</td></tr>
+              <tr><th rowspan="2">가금</th><td>육계 전기 → 후기</td><td>ME 약 3,000 → 3,200 kcal/kg</td><td>후기로 갈수록 에너지 농도 증가</td></tr>
+              <tr><td>산란계 산란기</td><td>ME 약 2,750~2,850 kcal/kg</td><td>산란 유지, 섭취량으로 에너지 조절</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">수치는 경향을 보여 주는 대표 범위입니다. 체중대·일당증체량별 세부 요구량은 한국가축사양표준 4차 개정판(2022)의 축종별 표를 확인하세요.</p>
+        </div>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 성장할수록 체중 1kg당 에너지 요구량은 줄지만 하루 총 요구량은 늘어납니다. 비육 후기에는 지방 축적에 에너지가 많이 들어 사료의 에너지 농도가 가장 높아집니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>어린 동물은 근육과 뼈를 주로 만들기 때문에 증체 1kg에 필요한 에너지가 적습니다. 근육은 70% 이상이 물이기 때문입니다. 반면 비육 후기에는 에너지 밀도가 높은 지방이 주로 축적되어 증체 1kg당 필요한 에너지가 크게 늘어나고 사료효율이 떨어집니다.</p>
+          <p>비유 초기 젖소는 산유량이 빠르게 늘지만 사료 섭취량은 늦게 따라와 에너지 부족 상태가 됩니다. 이때 체지방을 동원하며 체중이 줄고, 부족이 심하면 케토시스나 번식 장애로 이어집니다. 산란계는 사료 에너지 농도에 맞춰 섭취량을 스스로 조절하는 경향이 있어 에너지 농도에 따라 다른 영양소 농도도 함께 조정합니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-5', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-5">한국가축사양표준 4차 개정판을 기준으로 거세한우의 육성기, 비육 전기, 비육 후기 에너지 요구량을 비교해 줘. 단계별로 일당증체량 목표와 체중당 에너지 요구량이 어떻게 변하는지 설명하고, 비육 후기에 근내지방 축적이 에너지 요구량에 미치는 영향과 고온 스트레스 시 요구량을 어떻게 보정하는지도 정리해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 06 -->
+    <section class="lecture-section" id="card-6">
+      <div class="section-header">
+        <span class="card-number">CARD 06</span>
+        <h2 class="section-title">6. 반추가축의 단백질: RDP와 RUP</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          반추가축은 사료 단백질이 소장에 도착하기 전에 반추위 미생물이 먼저 분해합니다. 그래서 반추위에서 분해되는 단백질과 분해되지 않고 넘어가는 단백질을 나누어 평가합니다.
+        </p>
+
+        <div class="definition-box">
+          <h3>반추가축의 사료 단백질</h3>
+          <p class="formula">조단백질(CP) = RDP + RUP</p>
+          <p>RDP: 반추위 분해 단백질 · RUP: 반추위 비분해 단백질(바이패스 단백질)</p>
+        </div>
+
+        <div class="section-content table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>구분</th><th>RDP (분해성)</th><th>RUP (비분해성)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>이동 경로</th><td>반추위에서 펩타이드·아미노산·암모니아로 분해</td><td>반추위를 통과해 제4위·소장으로 이동</td></tr>
+              <tr><th>이용 방식</th><td>미생물이 에너지와 함께 이용해 미생물 단백질 합성</td><td>소장에서 직접 소화·흡수</td></tr>
+              <tr><th>과잉 시</th><td>암모니아가 간에서 요소로 바뀌어 뇨로 배설</td><td>소화되지 않은 부분은 분으로 배설</td></tr>
+              <tr><th>대표 원료</th><td>대두박, 요소 등 비단백태질소</td><td>어분, 옥수수글루텐밀, DDGS, 보호처리 단백질</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-heading">대사단백질(MP)</h3>
+        <ul class="content-list section-content">
+          <li>MP = 소장에서 소화되는 미생물 단백질 + 소화되는 RUP</li>
+          <li>미생물 단백질은 아미노산 조성이 우수해 MP의 주된 공급원</li>
+          <li>미생물 단백질 합성량은 발효 가능한 에너지에 좌우되므로 RDP와 에너지 공급의 동시성이 중요</li>
+          <li>성장·생산 단계별 RUP 중요도: 비유 초기 고능력우·어린 송아지 &gt; 육성기·비육 전기 &gt; 비육 후기·건유우</li>
+        </ul>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 반추위 미생물에게 필요한 만큼 RDP를 주고, 미생물 단백질로 채우지 못하는 부족분만 RUP로 보충합니다. RDP가 넘치면 질소 손실이, RUP가 넘치면 사료비 부담이 생깁니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>반추위 미생물은 RDP가 분해되어 생긴 암모니아와 아미노산을 질소원으로, 탄수화물 발효로 얻은 에너지를 동력으로 삼아 자기 몸의 단백질을 만듭니다. 이 미생물이 제4위와 소장으로 흘러가 소화되면 소의 단백질 공급원이 됩니다. 에너지가 부족하면 암모니아가 남아 흡수되고, 간에서 요소로 바뀌어 배설됩니다. 그래서 혈중 요소태질소(BUN)나 우유 요소태질소(MUN)가 높으면 RDP 과잉이나 에너지 부족을 의심합니다.</p>
+          <p>혈중 요소 일부는 침이나 반추위 벽을 통해 다시 반추위로 들어가 재이용됩니다. 이 요소 재순환 덕분에 반추가축은 저단백 조사료로도 살아갈 수 있습니다. 하지만 하루 수십 kg의 우유를 생산하는 고능력우는 미생물 단백질만으로 요구량을 채우기 어려워 열처리·보호처리한 RUP 원료나 반추위 보호 아미노산(메티오닌, 라이신)을 보충합니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-6', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-6">반추가축의 단백질 대사를 RDP와 RUP로 나누어 설명해 줘. 사료 단백질이 반추위에서 분해되어 미생물 단백질로 합성되는 과정과, 분해되지 않은 RUP가 소장에서 흡수되는 과정을 단계별로 정리하고, 두 경로가 합쳐져 대사단백질(MP)이 되는 원리를 설명해 줘. 또한 비유 초기 고능력 젖소에게 RUP 보충이 필요한 이유, RDP 과잉 시 혈중 요소태질소(BUN·MUN)가 높아지는 이유, 그리고 대두박·어분·옥수수글루텐밀의 RDP/RUP 특성을 비교하는 표를 만들어 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 07 -->
+    <section class="lecture-section" id="card-7">
+      <div class="section-header">
+        <span class="card-number">CARD 07</span>
+        <h2 class="section-title">7. 단위가축의 단백질: 소화 아미노산과 내인성 단백질</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          돼지와 닭은 소장에서 아미노산을 직접 흡수합니다. 그래서 조단백질 양보다 실제로 소화·흡수되는 아미노산의 양이 중요하며, 동물 스스로 장으로 분비한 내인성 단백질을 구분해야 정확한 소화율을 알 수 있습니다.
+        </p>
+
+        <div class="definition-box">
+          <h3>내인성 단백질 (내인성 아미노산 손실)</h3>
+          <p>사료가 아니라 동물 자신이 소화관으로 분비한 단백질. 소화효소, 점액(뮤신), 탈락한 장 상피세포, 담즙 등이며 일부는 재흡수되지 못하고 분으로 손실됩니다.</p>
+        </div>
+
+        <div class="comparison-box section-content">
+          <div class="comparison-item left">
+            <h3>기본 내인성 손실</h3>
+            <ul>
+              <li>사료 종류와 관계없이 항상 발생</li>
+              <li>사료 섭취량(건물)에 비례</li>
+            </ul>
+          </div>
+          <div class="comparison-item right">
+            <h3>특이 내인성 손실</h3>
+            <ul>
+              <li>사료 성분 때문에 추가로 발생</li>
+              <li>섬유, 트립신 저해제, 탄닌 등이 증가시킴</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-content">
+          <div class="nutrient-grid three">
+            <div class="nutrient-card"><h4>AID</h4><p>겉보기 회장소화율. 내인성 손실을 보정하지 않아 과소평가</p></div>
+            <div class="nutrient-card"><h4>SID</h4><p>표준 회장소화율. 기본 손실만 보정. 돼지 아미노산 요구량의 기준</p></div>
+            <div class="nutrient-card"><h4>TID</h4><p>진정 회장소화율. 기본과 특이 손실 모두 보정. 측정이 어려움</p></div>
+          </div>
+        </div>
+
+        <ul class="content-list section-content">
+          <li>제한아미노산: 돼지는 라이신, 가금은 메티오닌이 제1제한아미노산</li>
+          <li>이상적 아미노산 비율: 라이신을 100으로 두고 다른 아미노산 요구량 산정</li>
+          <li>가금은 4차 개정에서 가소화 아미노산 기준으로 요구량 산정</li>
+          <li>성장할수록 단백질 요구 농도 감소: 이유자돈 &gt; 육성돈 &gt; 비육돈</li>
+        </ul>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 같은 조단백질 함량이라도 섬유나 항영양인자가 많은 원료는 내인성 손실을 늘려 실제로 이용할 수 있는 아미노산이 줄어듭니다. 그래서 돼지 사료는 조단백질 %보다 SID 라이신 %로 설계합니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>회장 끝에서 측정한 아미노산에는 소화되지 않은 사료 아미노산과 내인성 아미노산이 섞여 있습니다. 이를 구분하지 않으면 단백질 함량이 낮은 원료일수록 소화율이 낮게 나오고, 원료를 섞었을 때 소화율을 더할 수 없습니다. 기본 내인성 손실을 보정한 SID는 원료끼리 더할 수 있어 사료 배합에 쓰기 좋기 때문에 한국가축사양표준과 NRC가 돼지 아미노산 요구량의 기준으로 사용합니다. 4차 개정판의 돼지 저단백 사료 전략도 SID 기준으로 합성 아미노산을 보충해 필요한 만큼만 공급하는 원리입니다.</p>
+          <p>유지 아미노산 요구량의 상당 부분은 장으로 빠져나가는 내인성 손실을 메우기 위한 것입니다. 점액 단백질인 뮤신에는 트레오닌이 많아, 섬유가 많은 사료를 먹거나 유지요구량 비중이 큰 임신모돈에서는 트레오닌 요구 비중이 상대적으로 커집니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-7', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-7">돼지의 내인성 단백질(내인성 아미노산 손실)이 무엇인지, 어떤 물질들로 구성되는지 설명해 줘. 기본 내인성 손실과 특이 내인성 손실의 차이를 정리하고, 이를 보정하는 방식에 따라 겉보기(AID), 표준(SID), 진정(TID) 회장소화율이 어떻게 달라지는지 예시 계산과 함께 비교해 줘. 또한 한국가축사양표준이 SID 라이신을 기준으로 쓰는 이유, 섬유가 많은 사료에서 트레오닌 요구량이 높아지는 이유, 그리고 이유자돈·육성돈·비육돈·임신모돈의 SID 라이신 요구량 변화 경향도 정리해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 08 -->
+    <section class="lecture-section" id="card-8">
+      <div class="section-header">
+        <span class="card-number">CARD 08</span>
+        <h2 class="section-title">8. 축종별·성장단계별 무기물 요구량</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          무기물은 필요한 양은 적지만 뼈 형성, 산란, 비유, 효소 작용에 꼭 필요합니다. 특히 칼슘과 인은 축종과 생산 단계에 따라 요구량 차이가 크게 나타납니다.
+        </p>
+
+        <div class="section-content">
+          <div class="comparison-box">
+            <div class="comparison-item left">
+              <h3>다량광물</h3>
+              <ul>
+                <li>칼슘(Ca), 인(P): 뼈·난각·우유</li>
+                <li>나트륨(Na), 칼륨(K), 염소(Cl): 체액 균형</li>
+                <li>마그네슘(Mg), 황(S)</li>
+              </ul>
+            </div>
+            <div class="comparison-item right">
+              <h3>미량광물</h3>
+              <ul>
+                <li>아연(Zn), 구리(Cu), 철(Fe), 망간(Mn)</li>
+                <li>셀레늄(Se), 요오드(I), 코발트(Co)</li>
+                <li>효소와 호르몬의 구성 성분</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-content table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>축종 · 단계</th><th>칼슘(Ca)</th><th>인(P)</th><th>특징</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>이유자돈 → 비육돈</th><td>약 0.85 → 0.5% 내외</td><td>STTD 인 약 0.45 → 0.2% 내외</td><td>성장할수록 감소</td></tr>
+              <tr><th>육계 전기 → 후기</th><td>약 0.9~1.0 → 0.8%</td><td>유효인 약 0.45 → 0.35%</td><td>골격 성장기에 높음</td></tr>
+              <tr><th>산란계 산란기</th><td>약 3.5~4.2%</td><td>유효인 약 0.3~0.4%</td><td>난각 형성으로 칼슘 요구 매우 높음</td></tr>
+              <tr><th>비유 젖소</th><td>건물 중 약 0.6~0.8%</td><td>건물 중 약 0.35~0.4%</td><td>유량에 비례해 증가</td></tr>
+              <tr><th>비육 한우</th><td>건물 중 약 0.4~0.6%</td><td>건물 중 약 0.2~0.3%</td><td>곡류 위주 사료는 Ca 부족 주의</td></tr>
+            </tbody>
+          </table>
+          <p class="table-note">수치는 경향을 보여 주는 대표 범위입니다. 세부 요구량은 한국가축사양표준 4차 개정판(2022)의 축종별 표를 확인하세요.</p>
+        </div>
+
+        <div class="insight-box">
+          <p><strong>핵심:</strong> 칼슘과 인은 양뿐 아니라 비율(Ca:P, 대개 1~2:1)도 중요합니다. 단위가축은 식물성 사료의 피틴태 인을 잘 이용하지 못해 무기태 인이나 피타아제를 보충합니다.</p>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>곡류와 박류에 들어 있는 인의 상당 부분은 피틴산과 결합한 피틴태 인입니다. 반추가축은 반추위 미생물이 피틴을 분해해 이용하지만, 돼지와 닭은 피틴 분해 효소(피타아제)가 거의 없어 대부분 분으로 배설합니다. 이 때문에 돼지는 표준전장소화 인(STTD P), 가금은 유효인 기준으로 요구량을 표시하며, 사료에 피타아제를 넣으면 인 이용률이 높아지고 분뇨 중 인 배출이 줄어듭니다.</p>
+          <p>산란계는 하루 한 개의 알을 낳으며 난각을 만드는 데 약 2g의 칼슘을 씁니다. 난각은 주로 밤에 형성되므로 굵은 입자의 석회석이나 패각을 급여해 소화관에 오래 머물게 합니다. 젖소는 분만 직후 우유로 칼슘이 갑자기 빠져나가 유열(저칼슘혈증)이 생길 수 있어 건유기 칼슘 관리가 중요합니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-8', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-8">한국가축사양표준 4차 개정판 기준으로 산란계(산란기)와 육계(전기)의 칼슘과 유효인 요구량을 비교해 줘. 산란계에 칼슘이 훨씬 많이 필요한 이유를 난각 형성과 연결해 설명하고, 단위가축이 식물성 사료의 피틴태 인을 잘 이용하지 못하는 이유와 피타아제 첨가의 효과, 그리고 인 과잉이 환경에 미치는 영향도 정리해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CARD 09 -->
+    <section class="lecture-section" id="card-9">
+      <div class="section-header">
+        <span class="card-number">CARD 09</span>
+        <h2 class="section-title">9. 종합 비교 및 정리</h2>
+      </div>
+      <div class="card-body">
+        <p class="section-description">
+          지금까지 다룬 에너지, 단백질, 무기물 요구량을 축종별로 모아 보면 공통된 원리가 보입니다. 축종마다 쓰는 기준은 다르지만, 성장단계와 생산 목적에 따라 요구량이 바뀌는 방향은 비슷합니다.
+        </p>
+
+        <div class="section-content table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr><th>축종</th><th>에너지 기준</th><th>단백질 기준</th><th>주목할 무기물</th><th>요구량이 가장 높은 시기</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>한우</th><td>TDN · 정미에너지</td><td>CP, RDP/RUP</td><td>Ca, P</td><td>육성기(단백질), 비육 후기(에너지)</td></tr>
+              <tr><th>젖소</th><td>ME (4차 개정)</td><td>대사단백질, RDP/RUP</td><td>Ca, P, Mg</td><td>비유 초기</td></tr>
+              <tr><th>돼지</th><td>ME (NE 참고)</td><td>SID 아미노산</td><td>STTD P, Ca</td><td>이유자돈(농도), 포유모돈(총량)</td></tr>
+              <tr><th>육계</th><td>ME</td><td>가소화 아미노산</td><td>유효인, Ca</td><td>전기(단백질), 후기(에너지)</td></tr>
+              <tr><th>산란계</th><td>ME</td><td>가소화 아미노산</td><td>Ca (매우 높음)</td><td>산란 최성기</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section-content">
+          <div class="priority-timeline">
+            <div class="priority-item">
+              <div class="priority-number">원리 1</div>
+              <div><h4>어릴수록 고농도</h4><p>섭취량은 적고 성장 속도는 빨라 사료 1kg당 단백질·아미노산·무기물 농도가 높아야 합니다.</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">원리 2</div>
+              <div><h4>생산 목적이 요구량을 결정</h4><p>고기, 우유, 알, 새끼 중 무엇을 생산하느냐에 따라 필요한 영양소의 종류와 양이 달라집니다.</p></div>
+            </div>
+            <div class="priority-item">
+              <div class="priority-number">원리 3</div>
+              <div><h4>정밀 급여가 비용과 환경을 함께 개선</h4><p>필요한 만큼만 공급하면 사료비가 줄고 분뇨 중 질소·인과 온실가스 배출도 줄어듭니다.</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <p class="detail-label">자세한 설명</p>
+          <p>성장단계에 맞춰 사료를 여러 번 바꿔 주는 단계별 급여(phase feeding)는 이 원리를 현장에 적용한 방법입니다. 한 가지 사료로 전 기간을 키우면 어린 시기에는 영양소가 부족하고 출하 직전에는 남게 됩니다. 단계를 나눌수록 요구량에 가깝게 공급할 수 있어 사료비와 분뇨 배출이 함께 줄어듭니다.</p>
+          <p>한국가축사양표준 4차 개정판이 탄소중립과 정밀 급여를 강조한 것도 같은 맥락입니다. 요구량을 정확히 아는 것은 생산성을 높이는 출발점이자, 지속가능한 축산을 위한 기본 도구입니다.</p>
+        </div>
+
+        <div class="snippet-box">
+          <div class="snippet-header">
+            <span class="snippet-label">더 알아보기</span>
+            <button class="copy-button" onclick="copyToClipboard('snippet-9', this)">복사</button>
+          </div>
+          <div class="snippet-content" id="snippet-9">한우, 젖소, 돼지, 육계, 산란계 중 하나를 골라 출생부터 출하(또는 생산 종료)까지 성장단계별 에너지, 단백질, 칼슘·인 요구량 변화를 한국가축사양표준 4차 개정판 기준으로 보고서 형식으로 정리해 줘. 단계별 요구량이 바뀌는 생리적 이유와, 요구량에 맞춘 단계별 사료 급여(phase feeding)가 사료비와 환경에 주는 이점도 포함해 줘.</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>가축사양학 강의 자료</p>
+      <p class="footer-note">필요한 만큼, 정확하게: 영양소 요구량은 정밀 사양의 출발점입니다</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyToClipboard(elementId, button) {
+      const text = document.getElementById(elementId).innerText;
+      const done = () => {
+        const originalText = button.innerText;
+        button.innerText = '복사됨';
+        setTimeout(() => { button.innerText = originalText; }, 2000);
+      };
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(done).catch(() => fallbackCopy(text, done));
+      } else {
+        fallbackCopy(text, done);
+      }
+    }
+    function fallbackCopy(text, done) {
+      const area = document.createElement('textarea');
+      area.value = text;
+      area.setAttribute('readonly', '');
+      area.style.position = 'fixed';
+      area.style.opacity = '0';
+      document.body.appendChild(area);
+      area.select();
+      try { document.execCommand('copy'); done(); } catch (e) {}
+      document.body.removeChild(area);
+    }
+  </script>
+</body>
+</html>

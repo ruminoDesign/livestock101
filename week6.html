@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가축사양학 - 축종별 사양관리: 한우</title>
+  <style>
+    :root {
+      --primary: #2D5016;
+      --accent: #8B7355;
+      --bg: #FAFAF8;
+      --card: #FFFFFF;
+      --text: #2C2C2C;
+      --muted: #5E5E5A;
+      --soft: #F5F5F3;
+      --border: #E8E8E6;
+      --font-serif: Georgia, 'Times New Roman', serif;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --primary: #9CC27E;
+        --accent: #C7AE8C;
+        --bg: #1B1C1A;
+        --card: #242522;
+        --text: #E8E8E4;
+        --muted: #B3B3AD;
+        --soft: #2D2E2A;
+        --border: #3A3B37;
+      }
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.7;
+    }
+
+    /* 헤더 */
+    .header {
+      background: #2D5016;
+      color: #FFFFFF;
+      padding: 2.5rem 1rem 2rem;
+      text-align: center;
+    }
+    .header .title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      margin: 0 0 0.4rem;
+      letter-spacing: 0.02em;
+    }
+    .header .subtitle {
+      margin: 0;
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* 상단 도구 */
+    .toolbar {
+      max-width: 880px;
+      margin: 1.5rem auto 0;
+      padding: 0 1rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .print-button {
+      background: var(--primary);
+      color: var(--card);
+      border: none;
+      border-radius: 6px;
+      padding: 0.65rem 1.4rem;
+      font-size: 0.95rem;
+      font-family: var(--font-sans);
+      cursor: pointer;
+    }
+    .print-button:hover { opacity: 0.88; }
+    .print-button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+    /* 목차 */
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 1rem 1rem 3rem;
+    }
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .toc h2 {
+      font-family: var(--font-serif);
+      font-size: 1.1rem;
+      color: var(--primary);
+      margin: 0 0 0.75rem;
+    }
+    .toc ol {
+      margin: 0;
+      padding-left: 1.4rem;
+      columns: 2;
+      column-gap: 2rem;
+    }
+    .toc li { margin-bottom: 0.25rem; font-size: 0.95rem; }
+    .toc a { color: var(--text); text-decoration: none; }
+    .toc a:hover { color: var(--primary); text-decoration: underline; }
+
+    /* 카드 */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-top: 5px solid var(--primary);
+      border-radius: 10px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .card-number {
+      display: inline-block;
+      font-family: var(--font-serif);
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      margin-bottom: 0.25rem;
+    }
+    .card-title {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin: 0 0 1rem;
+      line-height: 1.35;
+    }
+
+    /* 핵심 요약 (개조식) */
+    .key-points {
+      background: var(--soft);
+      border-radius: 8px;
+      padding: 1rem 1.25rem 1rem 2.25rem;
+      margin: 0 0 1.25rem;
+    }
+    .key-points li { margin-bottom: 0.35rem; }
+    .key-points li:last-child { margin-bottom: 0; }
+    .key-points strong { color: var(--primary); }
+
+    /* 세부 설명 */
+    .detail-label {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin: 0 0 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px dashed var(--border);
+    }
+    .detail p {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin: 0 0 0.85rem;
+    }
+    .detail h4 {
+      font-size: 1rem;
+      color: var(--primary);
+      margin: 1.1rem 0 0.4rem;
+    }
+    .detail ul, .detail ol {
+      font-size: 0.95rem;
+      margin: 0 0 0.85rem;
+      padding-left: 1.4rem;
+    }
+    .detail li { margin-bottom: 0.3rem; }
+
+    /* 표 */
+    .table-wrap { overflow-x: auto; margin: 0.5rem 0 1rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      min-width: 480px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.55rem 0.7rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--soft);
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    /* 핵심 문장 */
+    .insight {
+      border-left: 4px solid var(--accent);
+      background: var(--soft);
+      padding: 0.8rem 1rem;
+      margin: 1rem 0;
+      font-size: 0.95rem;
+      border-radius: 0 6px 6px 0;
+    }
+    .insight strong { color: var(--accent); margin-right: 0.4rem; }
+
+    /* 과제 스니핏 */
+    .snippet-box {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 1.25rem;
+      overflow: hidden;
+    }
+    .snippet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--soft);
+      padding: 0.55rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .snippet-label {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--primary);
+    }
+    .copy-button {
+      background: var(--card);
+      color: var(--primary);
+      border: 1px solid var(--primary);
+      border-radius: 4px;
+      padding: 0.25rem 0.8rem;
+      font-size: 0.8rem;
+      cursor: pointer;
+      font-family: var(--font-sans);
+    }
+    .copy-button:hover { background: var(--primary); color: var(--card); }
+    .snippet-content {
+      padding: 0.85rem 1rem;
+      font-size: 0.93rem;
+    }
+
+    /* 푸터 */
+    .footer {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .footer p { margin: 0.2rem 0; }
+
+    /* 반응형 */
+    @media (max-width: 600px) {
+      .header .title { font-size: 1.6rem; }
+      .card { padding: 1.25rem 1rem 1.1rem; }
+      .card-title { font-size: 1.25rem; }
+      .toc ol { columns: 1; }
+      .key-points { padding: 0.9rem 1rem 0.9rem 1.8rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; }
+    }
+
+    /* 인쇄 */
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      :root {
+        --primary: #2D5016; --accent: #8B7355; --bg: #FFFFFF; --card: #FFFFFF;
+        --text: #000000; --muted: #444444; --soft: #F3F3F0; --border: #CCCCCC;
+      }
+      body { background: #FFFFFF; font-size: 10.5pt; line-height: 1.55; }
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .toolbar, .copy-button, .toc { display: none; }
+      .header { padding: 0 0 8mm; background: #FFFFFF; color: #2D5016; border-bottom: 2px solid #2D5016; margin-bottom: 6mm; }
+      .container { max-width: none; padding: 0; }
+      .card { break-inside: avoid-page; page-break-inside: avoid; margin-bottom: 7mm; padding: 5mm 6mm; }
+      .card.long { break-inside: auto; page-break-inside: auto; }
+      .card-title { break-after: avoid; }
+      .table-wrap { overflow: visible; }
+      table { min-width: 0; }
+      .snippet-box, .insight, table, .key-points { break-inside: avoid; }
+      .footer { border-top: 1px solid #CCCCCC; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <h1 class="title">가축사양학</h1>
+    <p class="subtitle">축종별 사양관리 ① 한우</p>
+  </header>
+
+  <div class="toolbar">
+    <button class="print-button" onclick="window.print()">전체 출력하기</button>
+  </div>
+
+  <main class="container">
+
+    <nav class="toc" aria-label="목차">
+      <h2>목차</h2>
+      <ol>
+        <li><a href="#card-1">한우 사양의 목표</a></li>
+        <li><a href="#card-2">한우 등급 판정</a></li>
+        <li><a href="#card-3">성장의 순서</a></li>
+        <li><a href="#card-4">성장 단계별 특징</a></li>
+        <li><a href="#card-5">단계별 사양관리 목표</a></li>
+        <li><a href="#card-6">단계별 사료 급여 예시</a></li>
+        <li><a href="#card-7">마블링을 높이는 기본 사양</a></li>
+        <li><a href="#card-8">비타민 A 제한 급여</a></li>
+        <li><a href="#card-9">반추위 바이패스 비타민 C</a></li>
+        <li><a href="#card-10">육성기 비타민 B군</a></li>
+      </ol>
+    </nav>
+
+    <!-- 카드 1 -->
+    <article class="card" id="card-1">
+      <span class="card-number">CARD 01</span>
+      <h2 class="card-title">한우 사양의 목표</h2>
+      <ul class="key-points">
+        <li><strong>핵심:</strong> 좋은 고기를, 알맞은 기간에, 적은 비용으로</li>
+        <li><strong>품질:</strong> 근내지방도가 높은 고급육(1+, 1++) 생산</li>
+        <li><strong>생산성:</strong> 출하 체중 확보, 출하월령 단축(약 30개월 → 28개월 이하)</li>
+        <li><strong>경제성:</strong> 경영비의 절반 이상을 차지하는 사료비 절감</li>
+        <li><strong>건강:</strong> 송아지 설사·호흡기 질병, 비육 후기 대사성 질병 예방</li>
+        <li>비육우는 고기 생산, 번식우는 1년 1산이 목표</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <p>한우 사양관리는 송아지 출생부터 출하(또는 번식 활용)까지 성장 단계에 맞게 사료와 환경을 조절하는 관리 체계입니다. 유전 능력을 최대한 발휘하게 하면서 생산비는 최소화하는 것이 목적입니다.</p>
+        <p>한우는 근내지방(마블링)이 가격을 크게 좌우하므로 품질 목표가 특히 중요합니다. 동시에 사료비가 경영비의 절반 이상을 차지하므로, 사료를 얼마나 효율적으로 쓰느냐가 농가 수익을 결정합니다.</p>
+        <h4>비육우와 번식우의 목표 차이</h4>
+        <ul>
+          <li><strong>비육우(거세우):</strong> 출하 시 체중과 근내지방도를 높이고 출하월령을 단축하는 것이 핵심입니다.</li>
+          <li><strong>번식우(암소):</strong> 건강한 송아지를 매년 생산하는 것이 목표입니다. 분만간격 12개월, 적정 체형 유지, 송아지 육성률 향상이 핵심입니다.</li>
+        </ul>
+        <div class="insight"><strong>핵심</strong>품질(마블링)과 비용(사료비)은 서로 부딪히기 쉽습니다. 오래 먹이면 마블링은 좋아지지만 사료비가 늘어납니다. 한우 사양관리는 이 균형점을 찾는 일입니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">토의 프롬프트</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-1', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-1">한우 출하월령을 30개월에서 28개월 이하로 단축하면 농가와 소비자에게 각각 어떤 이점과 위험이 있을까요? 사료비, 근내지방도, 탄소 배출 측면에서 토의해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 2 -->
+    <article class="card" id="card-2">
+      <span class="card-number">CARD 02</span>
+      <h2 class="card-title">한우 등급 판정</h2>
+      <ul class="key-points">
+        <li><strong>최종 등급</strong> = 육질등급 + 육량등급 (예: 1++A)</li>
+        <li><strong>육질등급(1++, 1+, 1, 2, 3):</strong> 근내지방도, 육색, 지방색, 조직감, 성숙도</li>
+        <li><strong>육량등급(A, B, C):</strong> 등지방두께, 등심단면적, 도체중</li>
+        <li>1++는 근내지방도 7·8·9번(지방 15.6% 이상), 1+는 6번</li>
+        <li>2019년 12월 개편으로 항목별 최저등급제 도입</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <p>국내산 소고기는 유통 전에 육질등급과 육량등급을 함께 판정받습니다. 육질등급은 고기의 품질을, 육량등급은 소 한 마리에서 얻을 수 있는 고기의 양을 나타냅니다.</p>
+        <h4>근내지방도 번호별 육질등급 (2019년 12월 이후)</h4>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>육질등급</th><th>근내지방도 번호</th><th>지방함량</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1++</td><td>7, 8, 9</td><td>15.6% 이상</td></tr>
+              <tr><td>1+</td><td>6</td><td>12.3~15.6%</td></tr>
+              <tr><td>1</td><td>4, 5</td><td>-</td></tr>
+              <tr><td>2</td><td>2, 3</td><td>-</td></tr>
+              <tr><td>3</td><td>1</td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>최저등급제</h4>
+        <p>근내지방도, 육색, 지방색, 조직감을 항목별로 따로 평가하고, 그중 가장 낮은 등급을 최종 육질등급으로 적용합니다. 마블링이 7번이어도 육색이 나쁘면 1++를 받을 수 없습니다.</p>
+        <h4>육량등급</h4>
+        <p>등지방두께, 등심단면적, 도체중으로 육량지수를 계산해 A, B, C로 나눕니다. 2019년 개편부터는 단일 계산식 대신 품종과 성별에 따라 다른 계산식을 적용합니다.</p>
+        <h4>개편의 배경</h4>
+        <p>1++ 기준을 근내지방도 8·9번에서 7·8·9번으로 낮춘 이유는 지나친 장기 비육을 줄이기 위해서입니다. 정부는 평균 사육기간이 31.2개월에서 29.0개월로 줄어 농가 경영비가 절감될 것으로 기대했습니다.</p>
+        <div class="insight"><strong>핵심</strong>육량(A)은 "많이", 육질(1++)은 "맛있게"를 뜻합니다. 지방을 너무 많이 붙이면 육질은 오르지만 등지방이 두꺼워져 육량등급이 떨어질 수 있습니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">토의 프롬프트</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-2', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-2">2019년 등급 개편으로 1++ 기준이 근내지방도 7번까지 완화되었습니다. 이 변화가 농가(사육기간, 생산비), 소비자(가격, 품질), 등급제의 신뢰도에 각각 어떤 영향을 주었을지 토의해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 3 -->
+    <article class="card" id="card-3">
+      <span class="card-number">CARD 03</span>
+      <h2 class="card-title">성장의 순서</h2>
+      <ul class="key-points">
+        <li><strong>골격 → 근육 → 지방</strong> 순서로 성장</li>
+        <li>지방 축적 순서: 복강지방 → 피하지방 → 근간지방 → 근내지방</li>
+        <li>마블링(근내지방)이 가장 늦게 쌓임</li>
+        <li>시기를 놓치면 되돌리기 어려움</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <p>한우의 몸은 한꺼번에 자라지 않고 순서대로 자랍니다. 먼저 뼈(골격)가 자라 몸의 틀을 만들고, 그 위에 근육이 붙으며, 마지막으로 지방이 집중적으로 쌓입니다.</p>
+        <p>지방 중에서도 근내지방(마블링)은 가장 늦게 쌓입니다. 그래서 비육 후기의 관리가 고기 품질을 결정합니다. 하지만 근내지방을 쌓을 "그릇"인 체격과 반추위는 육성기에 이미 만들어집니다.</p>
+        <div class="insight"><strong>핵심</strong>육성기에 골격과 반추위가 충분히 발달하지 못하면, 비육기에 아무리 잘 먹여도 체격과 마블링이 따라오지 않습니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">조사 과제</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-3', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-3">송아지의 반추위는 출생 직후와 성우가 되었을 때 4개 위 중에서 차지하는 비율이 어떻게 달라지는지 조사해 봅시다. 그리고 이 변화가 단계별 사료 선택에 어떤 의미를 갖는지 정리해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 4 -->
+    <article class="card" id="card-4">
+      <span class="card-number">CARD 04</span>
+      <h2 class="card-title">성장 단계별 특징</h2>
+      <ul class="key-points">
+        <li><strong>포유기(0~3~4개월):</strong> 반추위 미발달, 식도구 반사, 초유가 생존을 좌우</li>
+        <li><strong>육성기(~12개월):</strong> 골격과 반추위가 빠르게 발달</li>
+        <li><strong>비육전기(13~18개월):</strong> 근육 증가, 섭취량 급증</li>
+        <li><strong>비육중기(19~24개월):</strong> 섭취량 정점, 지방세포 분화</li>
+        <li><strong>비육후기(25개월~출하):</strong> 근내지방 축적, 섭취량 감소</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>단계</th><th>월령 / 체중</th><th>생리적 특징</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>포유기</td><td>출생~3~4개월<br>25~30kg → 100~120kg</td><td>반추위가 거의 발달하지 않아 단위동물처럼 젖을 소화합니다. 젖은 식도구 반사로 제4위로 바로 들어갑니다. 면역력이 약해 초유 섭취가 생존을 좌우합니다.</td></tr>
+              <tr><td>육성기</td><td>이유~12개월<br>약 300kg</td><td>골격과 반추위가 빠르게 발달합니다. 조사료를 먹으며 반추위 용적과 융모가 커지고, 이때의 체격이 이후 비육 능력의 바탕이 됩니다.</td></tr>
+              <tr><td>비육전기</td><td>13~18개월</td><td>골격 성장이 둔화되고 근육이 왕성하게 늘어납니다. 체중 증가와 함께 사료 섭취량이 빠르게 늘어납니다.</td></tr>
+              <tr><td>비육중기</td><td>19~24개월</td><td>사료 섭취량이 정점에 이릅니다. 근내지방세포가 분화하여 마블링의 바탕이 만들어집니다.</td></tr>
+              <tr><td>비육후기</td><td>25개월~출하<br>약 750~800kg</td><td>근육 성장은 줄고 지방 축적이 중심이 됩니다. 근내지방이 채워지지만 섭취량과 사료효율은 떨어집니다.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>섭취량은 체중을 계속 따라가지 않습니다. 한우 거세우의 농후사료 섭취량은 체중 450kg 무렵까지 체중의 1.8~1.9% 수준으로 늘다가 이후 감소합니다. 비육후기에는 체중이 늘어도 섭취량이 더 늘지 않습니다.</p>
+      </div>
+    </article>
+
+    <!-- 카드 5 -->
+    <article class="card" id="card-5">
+      <span class="card-number">CARD 05</span>
+      <h2 class="card-title">단계별 사양관리 목표</h2>
+      <ul class="key-points">
+        <li><strong>포유기:</strong> 초유 급여, 입붙이기 사료로 반추위 발달 유도</li>
+        <li><strong>이유기:</strong> 입붙이기 사료 하루 1kg 섭취 시 이유, 스트레스 최소화</li>
+        <li><strong>육성기:</strong> 조사료 위주로 골격과 반추위 만들기, 과비 방지</li>
+        <li><strong>비육기:</strong> 농후사료로 근육과 마블링 채우기</li>
+        <li><strong>번식우:</strong> 14~15개월 첫 수정, 24개월 전후 첫 분만</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <h4>포유기: 생존과 위 발달</h4>
+        <p>출생 후 빠르게 초유를 먹여 면역을 확보합니다. 생후 1주경부터 입붙이기 사료와 양질 건초를 조금씩 주어 반추위 발달을 유도합니다. 설사와 폐렴 예방이 최우선입니다.</p>
+        <h4>이유기: 스트레스 최소화</h4>
+        <p>입붙이기 사료를 하루 1kg 정도 먹을 수 있을 때 이유합니다. 사료 변화와 어미와의 분리 스트레스로 증체가 멈추지 않도록 관리합니다.</p>
+        <h4>육성기: 골격과 반추위</h4>
+        <p>양질 조사료 위주로 급여하고 농후사료는 제한합니다. 너무 살찌우면 지방이 먼저 붙어 비육 능력이 떨어지므로 적정 증체(일당 약 0.8~0.9kg)를 유지합니다. 성장이 빠른 이 시기에는 비타민 B군 공급도 함께 고려합니다(카드 10).</p>
+        <h4>비육전기~중기: 근육 증가와 지방세포 분화</h4>
+        <p>농후사료 비율을 점차 높여 근육 생산을 극대화합니다. 사료 전환은 천천히 하여 반추위가 적응할 시간을 줍니다. 지방세포가 분화하는 이 시기에 비타민 A를 제한합니다(카드 8).</p>
+        <h4>비육후기: 근내지방 축적</h4>
+        <p>섭취량이 줄어드는 시기이므로 에너지를 충분히 확보하는 것이 관건입니다. 고창증, 산독증, 요결석 등 대사성 질병 예방에 주의합니다.</p>
+        <h4>번식우: 1년 1산</h4>
+        <p>약 14~15개월령에 첫 수정, 24개월령 전후 첫 분만을 목표로 합니다. 과비와 수척을 피하고 분만 전후 영양을 보강해 다음 발정이 빨리 오도록 합니다.</p>
+        <div class="insight"><strong>핵심</strong>육성기는 조사료로 키우고, 비육기는 농후사료로 채운다. 이 전환의 시점과 속도가 한우 사양관리의 기술입니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">케이스 스터디</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-4', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-4">A 농가는 송아지를 빨리 키우려고 육성기(6~12개월)부터 농후사료를 많이 먹였습니다. 12개월령 체중은 이웃 농가보다 무거웠지만, 출하 시 체중과 근내지방도는 오히려 낮았습니다. 그 이유를 성장의 순서(골격 → 근육 → 지방)와 반추위 발달의 관점에서 설명해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 6 -->
+    <article class="card long" id="card-6">
+      <span class="card-number">CARD 06</span>
+      <h2 class="card-title">단계별 사료 급여 예시 (거세 비육우)</h2>
+      <ul class="key-points">
+        <li><strong>육성기:</strong> 농후사료 3~4kg, 조사료 자유채식</li>
+        <li><strong>비육전기:</strong> 농후사료 6kg → 9kg으로 증가, 볏짚 2~3kg</li>
+        <li><strong>비육중기:</strong> 농후사료 9~10kg(정점), 볏짚 1.5~2kg</li>
+        <li><strong>비육후기:</strong> 농후사료 7~9kg(감소), 볏짚 1~1.5kg</li>
+        <li>흐름: 조사료 ↓, 단백질 ↓, 에너지 ↑</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <p>아래 수치는 교육용 대표 예시입니다. 실제 급여량은 농가의 사료 원료, 개체 체중, 『한국가축사양표준(한우)』에 따라 조정합니다.</p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>단계</th><th>농후사료 (kg/일)</th><th>조사료 (kg/일)</th><th>사료 영양수준</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>육성기<br>6~12개월</td><td>3~4<br>(체중의 1.2~1.5%)</td><td>양질 건초·볏짚 자유채식</td><td>CP 14~15%<br>TDN 68~70%</td></tr>
+              <tr><td>비육전기<br>13~18개월</td><td>6 → 9<br>(체중의 1.7~1.9%)</td><td>볏짚 2~3</td><td>CP 13% 내외<br>TDN 70~72%</td></tr>
+              <tr><td>비육중기<br>19~24개월</td><td>9~10 (정점)</td><td>볏짚 1.5~2</td><td>CP 12~13%<br>TDN 71~73%</td></tr>
+              <tr><td>비육후기<br>25개월~출하</td><td>7~9 (감소)<br>(체중의 1.2~1.4%)</td><td>볏짚 1~1.5</td><td>CP 11~12%<br>TDN 72~74%</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h4>비육후기 농후사료 배합 예시 (%)</h4>
+        <ul>
+          <li><strong>에너지원:</strong> 옥수수 40, 보리·소맥 15</li>
+          <li><strong>단백질원:</strong> 대두박·채종박 등 박류 10</li>
+          <li><strong>섬유·부산물:</strong> 단백피·밀기울·소맥피 25</li>
+          <li><strong>기타:</strong> 당밀 4, 석회석 1.5, 소금 0.5, 중조(완충제) 0.5, 비타민·광물질 프리믹스 0.5 등</li>
+        </ul>
+        <p>단계가 갈수록 조사료는 줄고, 단백질 수준은 낮아지고, 에너지 수준은 높아집니다. 몸이 골격 → 근육 → 지방 순서로 자라는 흐름과 그대로 맞물립니다.</p>
+        <div class="insight"><strong>핵심</strong>급여량은 체중을 따라가지 않습니다. 비육후기에는 덜 먹는 소에게 더 진한 사료를 먹이는 것이 기술입니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">분석 과제</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-5', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-5">육성기에 사료 단백질(CP)을 높이고 비육후기에 낮추는 이유를 단계별로 주로 합성되는 조직(근육 vs 지방)의 차이로 설명해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 7 -->
+    <article class="card" id="card-7">
+      <span class="card-number">CARD 07</span>
+      <h2 class="card-title">마블링을 높이는 기본 사양</h2>
+      <ul class="key-points">
+        <li>육성기 반추위 발달 = 비육기 섭취량 확보</li>
+        <li>전분 위주 고에너지 급여 (근내지방세포는 포도당을 선호)</li>
+        <li>사료 전환은 천천히 (산독증·고창증 예방)</li>
+        <li>비육후기에도 볏짚 최소량 유지</li>
+        <li>섭취량 유지: 물, 고온 스트레스, 사육밀도 관리</li>
+        <li>영양 외 요인: 거세, 유전능력</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <h4>마블링은 "지방세포 수 × 세포당 지방량"</h4>
+        <p>근내지방은 근섬유 사이의 지방세포에 쌓입니다. 따라서 마블링은 지방세포가 얼마나 많이 만들어지느냐(분화)와 각 세포에 지방이 얼마나 채워지느냐(축적)로 결정됩니다. 지방세포는 대략 12~22개월령 사이에 분화하고, 이후 비육후기의 에너지로 채워집니다.</p>
+        <ul>
+          <li><strong>반추위 발달:</strong> 비육기 섭취량은 반추위 용적에서 결정됩니다. 육성기에 조사료를 충분히 먹이는 것이 마블링의 출발점입니다.</li>
+          <li><strong>전분 위주 급여:</strong> 곡류 전분은 반추위에서 프로피온산으로 발효된 뒤 간에서 포도당이 됩니다. 근내지방세포는 피하지방세포보다 포도당을 더 많이 이용합니다.</li>
+          <li><strong>천천히 전환:</strong> 농후사료를 갑자기 늘리면 산독증과 고창증이 생겨 섭취량이 떨어집니다. 2주 이상에 걸쳐 단계적으로 늘립니다.</li>
+          <li><strong>조사료 최소 유지:</strong> 볏짚을 조금씩 주어 반추와 침 분비를 유지해야 반추위 건강을 지킬 수 있습니다.</li>
+          <li><strong>섭취량 유지:</strong> 섭취량이 줄어드는 비육후기에 에너지를 얼마나 확보하느냐가 마블링을 좌우합니다.</li>
+          <li><strong>영양 외 요인:</strong> 거세는 남성호르몬을 줄여 지방 축적을 늘립니다. 보증씨수소 정액과 유전체 평가 등 유전능력도 함께 작용합니다.</li>
+        </ul>
+        <div class="insight"><strong>핵심</strong>마블링은 비육 후기 몇 달 동안만 만들어지지 않습니다. 송아지 때의 위 발달과 육성기의 체격이 바탕이 되고, 비육 후기의 에너지가 그 위에 지방을 채웁니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">케이스 스터디</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-6', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-6">B 농가는 마블링을 높이려고 비육 후기에 조사료를 완전히 끊고 농후사료만 급여했습니다. 몇 주 후 소들의 사료 섭취량이 줄고 일부는 배가 부풀었습니다. 원인과 개선 방법을 제시해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 8 -->
+    <article class="card long" id="card-8">
+      <span class="card-number">CARD 08</span>
+      <h2 class="card-title">비타민 A 제한 급여</h2>
+      <ul class="key-points">
+        <li>비타민 A는 지방전구세포 분화의 <strong>브레이크</strong></li>
+        <li><strong>시기:</strong> 약 15~23개월령 (지방세포 분화기)</li>
+        <li><strong>방법:</strong> 프리믹스에서 비타민 A만 제외, 볏짚 위주 급여, 사일리지·청초 줄이기</li>
+        <li>한우 시험에서 근내지방도 약 17% 향상</li>
+        <li>혈중 레티놀 90μg/L 이하는 결핍 위험</li>
+        <li>"결핍"이 아니라 "제한"이다</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <h4>원리</h4>
+        <p>비타민 A는 지방전구세포가 지방세포로 분화하는 것을 억제합니다. 비타민 A 공급을 일시적으로 줄이면 이 억제가 풀려 근내지방세포가 더 많이 만들어지고 마블링이 향상됩니다. 일본에서 시작되어 미국 등에서도 많이 연구되었으며, 대부분 긍정적인 결과가 보고되었습니다.</p>
+        <h4>한우 시험 결과 (15개월령 거세우 60두)</h4>
+        <ul>
+          <li>15~23개월령 8개월 동안 사료에 비타민 A를 첨가하지 않고, 이후 다시 공급했습니다.</li>
+          <li>사료 섭취량, 일당증체, 사료요구율에는 차이가 없었습니다.</li>
+          <li>혈중 레티놀은 제한 종료 시점(23개월령)에 대조구보다 약 50% 낮았고, 제한 종료 후 회복되었습니다.</li>
+          <li>도체중과 육량등급에는 영향이 없었고, 근내지방도는 대조구 5.73에서 제한구 6.73으로 약 17% 높아졌습니다.</li>
+        </ul>
+        <h4>실제 방법</h4>
+        <ol>
+          <li><strong>시기 맞추기:</strong> 비육전기부터 비육중기까지(약 15~23개월령) 적용해 지방세포 분화 시기와 맞춥니다.</li>
+          <li><strong>프리믹스 조정:</strong> 비타민 A만 빼고 비타민 D와 E는 정상으로 공급합니다.</li>
+          <li><strong>원료의 카로틴 줄이기:</strong> 옥수수 사일리지, 라이그라스 사일리지, 청초는 카로틴(비타민 A 전구체)이 많습니다. 이 시기에는 볏짚 위주로 급여합니다.</li>
+          <li><strong>혈중 레티놀 확인:</strong> 농가의 감에 의존하지 않고 혈액 검사로 수준을 확인합니다.</li>
+          <li><strong>출하 전 회복:</strong> 제한 기간이 끝나면 비타민 A를 다시 공급합니다.</li>
+        </ol>
+        <h4>주의할 점</h4>
+        <ul>
+          <li>혈중 레티놀이 90μg/L 이하로 떨어지면 사료섭취량 감소 등 결핍증이 나타납니다. 한우 시험의 최저 농도는 약 170μg/L로 결핍증이 없었습니다.</li>
+          <li>일본 연구에서는 레티놀이 약 80%까지 감소하면서 섭취량 감소와 야맹증이 나타났습니다. 보리와 볏짚처럼 비타민 A가 적은 원료를 주로 썼기 때문입니다.</li>
+          <li>관찰할 증상: 식욕 저하, 야맹증(어두운 곳에서 부딪힘), 다리·가슴 부종, 요석증, 관절 이상. 증상이 보이면 즉시 비타민 A를 공급합니다.</li>
+          <li>송아지와 번식우에는 적용하지 않습니다. 번식우는 비타민 A와 카로틴이 부족하면 수태율이 떨어집니다.</li>
+        </ul>
+        <div class="insight"><strong>핵심</strong>목표는 결핍이 아니라 제한입니다. 결핍까지 가면 섭취량이 떨어져 오히려 손해이므로, 제한과 결핍의 경계를 혈액으로 관리해야 합니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">분석 과제</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-7', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-7">같은 비타민 A 제한 시험인데 일본 연구에서는 결핍증이 나타났고 한우 시험에서는 나타나지 않았습니다. 사료 원료(보리 vs 옥수수, 볏짚 vs 사일리지)의 차이로 그 이유를 설명해 봅시다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 9 -->
+    <article class="card" id="card-9">
+      <span class="card-number">CARD 09</span>
+      <h2 class="card-title">반추위 바이패스 비타민 C</h2>
+      <ul class="key-points">
+        <li>비타민 C는 지방세포 분화의 <strong>가속 페달</strong></li>
+        <li>비육이 진행될수록 혈중 비타민 C 감소</li>
+        <li>반추위에서 분해되므로 보호형 제제 필요</li>
+        <li>비타민 A 제한기에 함께 보충하는 조합이 합리적</li>
+        <li>개선 경향은 있으나 근거가 쌓이는 단계의 보조 기술</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <h4>원리</h4>
+        <ul>
+          <li><strong>분화 촉진:</strong> 비타민 A와 반대로, 비타민 C는 지방전구세포의 분화를 촉진하는 물질로 주목받았습니다.</li>
+          <li><strong>비육 중 감소:</strong> 소는 원래 간에서 비타민 C를 합성하지만, 비육우는 비육이 진행될수록, 특히 농후사료 비율이 높아질수록 혈중 비타민 C 농도가 떨어집니다.</li>
+          <li><strong>비타민 A 제한과의 관계:</strong> 비타민 A가 부족하면 비타민 C 합성도 줄어든다는 보고가 있습니다. 비타민 C는 콜라겐 합성에도 필수이므로, 비타민 A를 제한하는 기간에 보충하는 것이 합리적입니다.</li>
+        </ul>
+        <h4>왜 "바이패스"여야 하나</h4>
+        <p>비타민 C는 수용성이고 쉽게 변하는 물질이라 반추위에서 대부분 분해됩니다. 흡수는 하부소화관에서 일어나므로, 반추위를 통과해 장까지 도달하는 보호형 제제를 써야 합니다.</p>
+        <h4>제제의 종류와 급여 예</h4>
+        <ul>
+          <li><strong>유지피복형:</strong> 비타민 C를 대두경화유 등으로 코팅해 반추위를 통과시킵니다.</li>
+          <li><strong>인산에스테르형:</strong> 아스코르빈산-인산에스테르 마그네슘처럼 화학적으로 안정한 형태입니다.</li>
+          <li>일본 흑모화우 시험에서는 주로 12~30개월령에 급여했으며, 이용성이 좋은 제제는 체중 1kg당 하루 10~40mg 범위가 적당하다고 보았습니다.</li>
+          <li>같은 피복형이라도 제제에 따라 이용성이 달라 제제별로 투여량을 정해야 합니다.</li>
+        </ul>
+        <h4>효과의 한계</h4>
+        <p>일본 협정연구에서는 개선 경향을 보인 경우가 많았지만, 시험마다 조건이 다르고 두수가 적어 통계적으로 유의한 결과는 많지 않았습니다. 비타민 A 제한이 한우에서도 효과가 확인된 기술이라면, 바이패스 비타민 C는 근거가 쌓이는 중인 보조 기술입니다.</p>
+        <div class="insight"><strong>핵심</strong>비타민 A는 빼고, 비타민 C는 채운다. 지방세포가 만들어지는 시기에 분화 억제 신호는 줄이고, 분화 촉진 신호는 반추위를 피해 장까지 전달합니다.</div>
+      </div>
+    </article>
+
+    <!-- 카드 10 -->
+    <article class="card" id="card-10">
+      <span class="card-number">CARD 10</span>
+      <h2 class="card-title">육성기 비타민 B군</h2>
+      <ul class="key-points">
+        <li>에너지·단백질 대사와 세포분열의 보조효소</li>
+        <li>골격과 반추위가 빠르게 자라는 육성기 성장을 뒷받침</li>
+        <li>원래 반추위 미생물이 합성</li>
+        <li>개량으로 체격과 성장 속도가 커져 추가 공급 필요성 대두</li>
+        <li>이유 직후, 입식 초기, 사료 전환기에 보충 고려</li>
+      </ul>
+      <div class="detail">
+        <p class="detail-label">세부 설명</p>
+        <h4>역할</h4>
+        <p>비타민 B군(티아민, 니아신, 비오틴, 엽산, 비타민 B12 등)은 탄수화물·단백질·지방 대사에 필요한 보조효소입니다. 엽산과 비타민 B12는 DNA 합성과 세포분열에 필수입니다. 칼슘이나 인처럼 뼈를 직접 이루지는 않지만, 골격과 반추위가 빠르게 자라는 육성기의 대사를 뒷받침합니다.</p>
+        <h4>왜 추가 공급이 필요한가</h4>
+        <p>반추위 미생물이 비타민 B군을 합성하므로, 전통적으로는 반추가축에 보충이 필요 없다고 여겨졌습니다. 그러나 육종개량으로 체격과 성장 속도가 커지면서 요구량이 미생물 합성량을 넘을 수 있다는 견해가 늘고 있습니다. 고능력 젖소에서 비타민 B군 보충 효과가 보고된 것과 같은 맥락입니다.</p>
+        <h4>보충을 고려할 시기</h4>
+        <ul>
+          <li><strong>이유 직후:</strong> 반추위 미생물이 아직 충분히 자리 잡지 못한 시기</li>
+          <li><strong>입식 초기·사료 전환기:</strong> 섭취량이 떨어져 반추위 합성이 불안정한 시기</li>
+          <li><strong>코발트 부족 시:</strong> 비타민 B12는 코발트를 원료로 합성되므로 광물질 공급도 함께 확인</li>
+        </ul>
+        <p>반추위 보호형 비타민 B 제제를 쓰면 반추위 분해를 줄여 장까지 전달할 수 있습니다. 다만 비육우의 비타민 B 요구량 기준은 아직 정해지지 않았고, 보충 효과도 연구마다 차이가 있습니다.</p>
+        <div class="insight"><strong>핵심</strong>반추위가 만들어 주는 양이 "결핍을 막는 양"이라면, 개량된 한우가 빠르게 자라는 데 필요한 양은 그보다 많을 수 있습니다.</div>
+      </div>
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">토의 프롬프트</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-8', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-8">반추위가 비타민 B군을 만들어 주는데 왜 사료에 따로 넣을까요? 고능력 젖소의 사례와 개량된 한우의 성장 속도를 비교해 토의해 봅시다.</div>
+      </div>
+    </article>
+
+  </main>
+
+  <footer class="footer">
+    <p>가축사양학 강의 자료</p>
+    <p>축종별 사양관리 ① 한우</p>
+  </footer>
+
+  <script>
+    function copyToClipboard(elementId, button) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = button.innerText;
+        button.innerText = '복사됨!';
+        setTimeout(() => {
+          button.innerText = originalText;
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

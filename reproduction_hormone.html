@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가축사양학 - 번식과 호르몬 그리고 대사 변화</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* 이 페이지 전용 스타일 (공통 style.css는 그대로 둠) */
+    .hormone-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+    .hormone-card {
+      background: var(--white, #fff);
+      border: 1px solid var(--border-gray, #E8E8E6);
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+    }
+    .hormone-card h4 {
+      margin: 0 0 0.2rem;
+      color: var(--primary-green, #2D5016);
+      font-size: 1.05rem;
+    }
+    .hormone-card .kor-name {
+      margin: 0 0 0.6rem;
+      color: var(--accent-brown, #8B7355);
+      font-size: 0.9rem;
+    }
+    .hormone-card ul {
+      margin: 0;
+      padding-left: 1.1rem;
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+    .hormone-card .tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 0.1rem 0.5rem;
+      border-radius: 999px;
+      background: var(--light-gray, #F5F5F3);
+      color: var(--accent-brown, #8B7355);
+      margin-bottom: 0.4rem;
+    }
+
+    .table-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      font-size: 0.88rem;
+      margin-bottom: 0.6rem;
+    }
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border-gray, #E8E8E6);
+      border-radius: 10px;
+    }
+    .hormone-table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 900px;
+      font-size: 0.88rem;
+      background: var(--white, #fff);
+    }
+    .hormone-table th,
+    .hormone-table td {
+      border-bottom: 1px solid var(--border-gray, #E8E8E6);
+      border-left: 1px solid var(--border-gray, #E8E8E6);
+      padding: 0.55rem 0.5rem;
+      vertical-align: middle;
+      line-height: 1.5;
+    }
+    .hormone-table th {
+      background: var(--light-gray, #F5F5F3);
+      color: var(--primary-green, #2D5016);
+      text-align: center;
+      font-weight: 600;
+    }
+    .hormone-table th.group {
+      background: var(--primary-green, #2D5016);
+      color: #fff;
+    }
+    .hormone-table td.stage {
+      font-weight: 600;
+      color: var(--primary-green, #2D5016);
+      white-space: nowrap;
+      position: sticky;
+      left: 0;
+      background: var(--white, #fff);
+      border-left: none;
+    }
+    .hormone-table th.stage-head {
+      position: sticky;
+      left: 0;
+      border-left: none;
+    }
+    .hormone-table td.arrow {
+      text-align: center;
+      font-size: 1.15rem;
+      font-weight: 700;
+      width: 52px;
+    }
+    .hormone-table td.text {
+      vertical-align: top;
+    }
+    .hormone-table td.text ul {
+      margin: 0;
+      padding-left: 1rem;
+    }
+    .up { color: #1F6FB2; }
+    .down { color: #C0392B; }
+    .base { color: #9A9A96; font-weight: 400; }
+    .table-note {
+      font-size: 0.85rem;
+      color: #6B6B68;
+      margin-top: 0.6rem;
+      line-height: 1.6;
+    }
+
+    .print-bar {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 1rem;
+    }
+    .print-button {
+      font-size: 0.95rem;
+      padding: 0.5rem 1.1rem;
+      border-radius: 8px;
+      border: 1px solid var(--primary-green, #2D5016);
+      background: var(--white, #fff);
+      color: var(--primary-green, #2D5016);
+      cursor: pointer;
+    }
+    .print-button:hover {
+      background: var(--primary-green, #2D5016);
+      color: #fff;
+    }
+
+    /* 인쇄용 스타일 */
+    @page { size: A4; margin: 12mm; }
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: #fff !important; font-size: 10pt; }
+      .print-bar, .copy-button { display: none !important; }
+      .table-wrap { overflow: visible; border: none; }
+      .hormone-table { min-width: 0; font-size: 8pt; }
+      .hormone-table td.stage, .hormone-table th.stage-head { position: static; }
+      .hormone-table td.arrow { font-size: 10pt; width: auto; }
+      .hormone-grid { grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+      .hormone-card, .insight-box, .snippet-box, .hormone-table tr { break-inside: avoid; page-break-inside: avoid; }
+      .lecture-section { break-inside: auto; }
+      .section-title { break-after: avoid; page-break-after: avoid; }
+      .footer { break-inside: avoid; page-break-inside: avoid; padding: 0.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="title">가축사양학</h1>
+      <p class="subtitle">한우 번식우 사양관리 ① 번식과 호르몬 그리고 대사 변화</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="print-bar">
+      <button class="print-button" onclick="window.print()">🖨️ 전체 출력하기</button>
+    </div>
+
+    <!-- 1. 번식호르몬 -->
+    <section class="lecture-section">
+      <div class="section-header">
+        <h2 class="section-title">1. 번식호르몬</h2>
+      </div>
+
+      <p class="section-description">
+        번식은 시상하부 → 뇌하수체 → 난소로 이어지는 호르몬 신호로 조절됩니다.
+        발정 → 수정 → 착상 → 태아발달 → 분만 → 초유 포유 → 재귀발정의 모든 단계가 이 호르몬들의 증감으로 진행됩니다.
+      </p>
+
+      <div class="section-content">
+        <div class="hormone-grid">
+          <div class="hormone-card">
+            <span class="tag">시작 신호</span>
+            <h4>GnRH</h4>
+            <p class="kor-name">생식선자극호르몬 방출호르몬</p>
+            <ul>
+              <li>분비기관: 시상하부</li>
+              <li>기능: 뇌하수체에 FSH·LH 분비 지시</li>
+              <li>번식 축의 출발점</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">난포 성장</span>
+            <h4>FSH</h4>
+            <p class="kor-name">난포자극호르몬</p>
+            <ul>
+              <li>분비기관: 뇌하수체 전엽</li>
+              <li>기능: 난포 성장, 에스트로겐 생성 촉진</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">배란</span>
+            <h4>LH</h4>
+            <p class="kor-name">황체형성호르몬</p>
+            <ul>
+              <li>분비기관: 뇌하수체 전엽</li>
+              <li>기능: LH 서지(급증) → 배란</li>
+              <li>배란 후 황체 형성</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">발정</span>
+            <h4>E2 · 에스트로겐</h4>
+            <p class="kor-name">발정호르몬</p>
+            <ul>
+              <li>분비기관: 난포 (임신 말기 태반)</li>
+              <li>기능: 발정 행동 유발, LH 서지 유도</li>
+              <li>분만 시 자궁 수축 준비</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">임신 유지</span>
+            <h4>P4 · 프로게스테론</h4>
+            <p class="kor-name">황체호르몬</p>
+            <ul>
+              <li>분비기관: 황체, 태반</li>
+              <li>기능: 임신 유지, 발정 억제</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">황체 퇴행 · 분만</span>
+            <h4>PGF2α</h4>
+            <p class="kor-name">프로스타글란딘 F2알파</p>
+            <ul>
+              <li>분비기관: 자궁내막</li>
+              <li>기능: 황체 퇴행 → 다음 발정 시작</li>
+              <li>분만 시 자궁 수축</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">비유</span>
+            <h4>PRL · 프로락틴</h4>
+            <p class="kor-name">프로락틴</p>
+            <ul>
+              <li>분비기관: 뇌하수체 전엽</li>
+              <li>기능: 젖 생성, 모성 행동</li>
+              <li>송아지 포유 자극으로 분비 증가</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p><strong>💡 구분:</strong> 젖을 <strong>만드는</strong> 호르몬은 프로락틴, 만들어진 젖을 <strong>짜내는</strong> 호르몬은 옥시토신입니다.</p>
+      </div>
+
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">💡 좀 더 알아보기</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-1', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-1">나는 동물자원과학과 2학년 학생이야. 소의 21일 발정주기 동안 GnRH, FSH, LH, 에스트로겐, 프로게스테론, PGF2α가 어떤 순서로 오르내리는지 날짜별로 쉽게 설명해줘. 각 호르몬이 다음 호르몬에 어떤 신호를 주는지 화살표 흐름으로 정리해줘.</div>
+      </div>
+
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">💡 비교 과제</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-2', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-2">한우, 젖소, 돼지의 번식 생리를 비교해줘. 발정주기, 배란 수, 임신 기간, 임신 유지에 필요한 프로게스테론의 출처, 모체의 임신 인식 신호, 분만 후 발정이 다시 오는 시기를 표로 정리하고, 차이가 생기는 이유를 학부 2학년 수준으로 설명해줘.</div>
+      </div>
+    </section>
+
+    <!-- 2. 대사호르몬 -->
+    <section class="lecture-section">
+      <div class="section-header">
+        <h2 class="section-title">2. 대사호르몬</h2>
+      </div>
+
+      <p class="section-description">
+        대사호르몬은 몸의 에너지 상태를 번식 축에 전달합니다.
+        영양이 충분하면 번식호르몬 분비가 원활해지고, 부족하면 GnRH·LH 분비가 억제되어 발정이 늦어집니다.
+      </p>
+
+      <div class="section-content">
+        <div class="hormone-grid">
+          <div class="hormone-card">
+            <span class="tag">저장 신호</span>
+            <h4>인슐린</h4>
+            <p class="kor-name">인슐린</p>
+            <ul>
+              <li>분비기관: 췌장 (랑게르한스섬 β세포)</li>
+              <li>기능: 혈당을 조직으로 흡수, 지방 합성 촉진</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">영양 상태 지표</span>
+            <h4>IGF-1</h4>
+            <p class="kor-name">인슐린유사성장인자-1</p>
+            <ul>
+              <li>분비기관: 간 (성장호르몬 자극)</li>
+              <li>기능: 성장 촉진, 난포 발달 지원</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">동원 신호</span>
+            <h4>GH · 성장호르몬</h4>
+            <p class="kor-name">성장호르몬</p>
+            <ul>
+              <li>분비기관: 뇌하수체 전엽</li>
+              <li>기능: 체지방 분해, 영양소를 태아·유선으로 배분</li>
+              <li>에너지 부족 시 증가</li>
+            </ul>
+          </div>
+          <div class="hormone-card">
+            <span class="tag">스트레스 · 분만 개시</span>
+            <h4>코르티솔</h4>
+            <p class="kor-name">스트레스호르몬</p>
+            <ul>
+              <li>분비기관: 부신 피질</li>
+              <li>기능: 혈당 상승, 스트레스 대응</li>
+              <li>태아 코르티솔이 분만 개시</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="insight-box">
+        <p><strong>💡 핵심:</strong> 인슐린·IGF-1은 "번식해도 좋다"는 신호, GH·코르티솔은 "저장된 에너지를 꺼내 쓰라"는 신호입니다.</p>
+      </div>
+
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">💡 좀 더 알아보기</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-3', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-3">소가 에너지가 부족하면 왜 발정이 늦어지는지 설명해줘. 인슐린, IGF-1, 렙틴이 GnRH와 LH 분비에 어떤 영향을 주는지 단계별로, 학부 2학년이 이해할 수 있게 간단한 비유를 들어 설명해줘.</div>
+      </div>
+    </section>
+
+    <!-- 3. 단계별 호르몬과 대사 변화 -->
+    <section class="lecture-section">
+      <div class="section-header">
+        <h2 class="section-title">3. 번식 단계별 호르몬과 대사 변화</h2>
+      </div>
+
+      <p class="section-description">
+        앞에서 배운 호르몬이 번식 단계마다 어떻게 오르내리는지 한눈에 정리했습니다.
+        번식호르몬은 "언제" 번식이 일어날지를, 대사호르몬은 "번식이 가능한 상태인지"를 결정합니다.
+      </p>
+
+      <div class="section-content">
+        <div class="table-legend">
+          <span><strong class="up">↑</strong> 분비 촉진·증가</span>
+          <span><strong class="down">↓</strong> 분비 억제·감소</span>
+          <span><span class="base">–</span> 기저 수준</span>
+        </div>
+
+        <div class="table-wrap">
+          <table class="hormone-table">
+            <thead>
+              <tr>
+                <th class="stage-head" rowspan="2">단계</th>
+                <th class="group" colspan="5">번식호르몬</th>
+                <th class="group" colspan="4">대사호르몬</th>
+                <th rowspan="2">대사의 변화</th>
+                <th rowspan="2">주의사항</th>
+              </tr>
+              <tr>
+                <th>GnRH<br>FSH<br>LH</th>
+                <th>E2</th>
+                <th>P4</th>
+                <th>PGF2α</th>
+                <th>PRL</th>
+                <th>인슐린</th>
+                <th>IGF-1</th>
+                <th>GH</th>
+                <th>코르티솔</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="stage">발정</td>
+                <td class="arrow up">↑</td><td class="arrow up">↑</td><td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow base">–</td>
+                <td class="arrow up">↑</td><td class="arrow up">↑</td><td class="arrow base">–</td><td class="arrow base">–</td>
+                <td class="text"><ul><li>양의 에너지 균형</li><li>난포 성장에 포도당 이용</li><li>에너지 부족 시 발정 미약</li></ul></td>
+                <td class="text"><ul><li>적정 BCS 유지</li><li>승가 허용 행동 관찰</li><li>과비·저영양 피하기</li></ul></td>
+              </tr>
+              <tr>
+                <td class="stage">수정</td>
+                <td class="arrow down">↓</td><td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow base">–</td><td class="arrow base">–</td>
+                <td class="arrow base">–</td><td class="arrow base">–</td><td class="arrow base">–</td><td class="arrow base">–</td>
+                <td class="text"><ul><li>황체 형성, 착상 준비</li><li>난자·배아 품질은 영양에 좌우</li><li>단백질 과잉 시 자궁 환경 악화</li></ul></td>
+                <td class="text"><ul><li>발정 후 12–18시간 내 수정</li><li>사료 급변 금지</li></ul></td>
+              </tr>
+              <tr>
+                <td class="stage">착상</td>
+                <td class="arrow down">↓</td><td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow down">↓</td><td class="arrow base">–</td>
+                <td class="arrow base">–</td><td class="arrow base">–</td><td class="arrow base">–</td><td class="arrow base">–</td>
+                <td class="text"><ul><li>배아가 자궁유로 영양 공급</li><li>배아 사멸이 가장 많은 시기</li></ul></td>
+                <td class="text"><ul><li>이동·고온·혼군 스트레스 최소화</li><li>영양 일정하게 유지</li></ul></td>
+              </tr>
+              <tr>
+                <td class="stage">태아발달</td>
+                <td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow up">↑</td><td class="arrow down">↓</td><td class="arrow base">–</td>
+                <td class="arrow down">↓</td><td class="arrow base">–</td><td class="arrow up">↑</td><td class="arrow base">–</td>
+                <td class="text"><ul><li>초·중기 체지방 비축</li><li>말기 2–3개월 태아 급성장</li><li>포도당·아미노산 태아 우선 배분</li></ul></td>
+                <td class="text"><ul><li>임신 말기 에너지·단백질 증량</li><li>과비 → 난산</li><li>저영양 → 허약 송아지·초유 품질 저하</li></ul></td>
+              </tr>
+              <tr>
+                <td class="stage">분만</td>
+                <td class="arrow base">–</td><td class="arrow up">↑</td><td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow up">↑</td>
+                <td class="arrow down">↓</td><td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow up">↑</td>
+                <td class="text"><ul><li>사료 섭취량 감소</li><li>체지방 동원 시작 (NEFA 증가)</li></ul></td>
+                <td class="text"><ul><li>분만 2–3주 전 분만실 이동</li><li>난산 관찰, 깨끗한 깔짚</li></ul></td>
+              </tr>
+              <tr>
+                <td class="stage">초유 포유</td>
+                <td class="arrow down">↓</td><td class="arrow down">↓</td><td class="arrow base">–</td><td class="arrow base">–</td><td class="arrow up">↑</td>
+                <td class="arrow down">↓</td><td class="arrow down">↓</td><td class="arrow up">↑</td><td class="arrow base">–</td>
+                <td class="text"><ul><li>면역글로불린(IgG)이 초유로 이동</li><li>유선이 영양소 우선 사용</li><li>음의 에너지 균형, NEFA·케톤체 증가</li></ul></td>
+                <td class="text"><ul><li>생후 1–2시간 내 초유 섭취 확인</li><li>IgG 흡수력은 24시간 내 급감</li><li>어미 에너지 공급 증량</li></ul></td>
+              </tr>
+              <tr>
+                <td class="stage">재귀발정</td>
+                <td class="arrow up">↑</td><td class="arrow up">↑</td><td class="arrow up">↑</td><td class="arrow base">–</td><td class="arrow down">↓</td>
+                <td class="arrow up">↑</td><td class="arrow up">↑</td><td class="arrow down">↓</td><td class="arrow base">–</td>
+                <td class="text"><ul><li>에너지 균형 회복, NEFA 감소</li><li>자궁 수복 (약 30–40일)</li></ul></td>
+                <td class="text"><ul><li>BCS 회복</li><li>분만 후 85일 내 수태 목표</li><li>무발정 길면 수의사 상담</li></ul></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="table-note">
+          E2 에스트로겐 · P4 프로게스테론 · PRL 프로락틴 · GH 성장호르몬 · NEFA 비에스테르화 지방산<br>
+          ※ "–"는 분비가 없다는 뜻이 아니라 기저 수준을 유지한다는 뜻입니다.<br>
+          ※ 재귀발정의 P4 ↑는 분만 후 첫 배란이 일어난 뒤의 변화입니다.
+        </p>
+      </div>
+
+      <div class="insight-box">
+        <p><strong>💡 핵심:</strong> 영양 상태 → 대사호르몬 → 번식호르몬 → 번식 성적. 사양관리는 결국 단계별 에너지 균형을 맞추는 일입니다.</p>
+      </div>
+
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">💡 분석 과제</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-4', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-4">분만 후 한우 번식우에서 음의 에너지 균형(NEB)이 생기는 이유와, 이때 성장호르몬은 오르는데 IGF-1은 떨어지는 현상을 설명해줘. 그리고 송아지의 포유 자극이 LH 분비를 억제해 재귀발정이 늦어지는 원리를 젖소와 비교해서 학부 2학년 수준으로 정리해줘.</div>
+      </div>
+
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">💡 조사 과제</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-5', this)">복사</button>
+        </div>
+        <div class="snippet-content" id="snippet-5">한우의 목표 분만간격 12개월을 달성하려면 분만 후 며칠 안에 다시 수태해야 하는지 계산 과정과 함께 설명해줘. 그리고 임신 말기와 분만 후 영양 관리가 이 목표에 어떤 영향을 주는지 BCS(체충실지수)와 연결해서 알려줘.</div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>가축사양학 강의 자료</p>
+      <p class="footer-note">번식 생리를 알면 사양관리가 보인다</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyToClipboard(elementId, button) {
+      const text = document.getElementById(elementId).innerText;
+      const btn = button || (window.event && window.event.target);
+      navigator.clipboard.writeText(text).then(() => {
+        if (!btn) return;
+        const originalText = btn.innerText;
+        btn.innerText = '복사됨!';
+        setTimeout(() => {
+          btn.innerText = originalText;
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

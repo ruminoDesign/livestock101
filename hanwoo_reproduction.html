@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>가축사양학 - 제8주차 강의</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ===== 이 페이지 전용 스타일 (공통 style.css는 그대로 둠) ===== */
+    .print-bar { display: flex; justify-content: flex-end; margin-bottom: 1rem; }
+    .print-button {
+      font-size: 0.95rem; padding: 0.5rem 1.1rem; border-radius: 8px; cursor: pointer;
+      border: 1px solid var(--primary-green, #2D5016);
+      background: var(--white, #fff); color: var(--primary-green, #2D5016);
+    }
+    .print-button:hover { background: var(--primary-green, #2D5016); color: #fff; }
+
+    .keyword-snippet { line-height: 2; word-break: keep-all; }
+
+    /* --- 카드뉴스 --- */
+    .cardnews-part {
+      margin: 2.5rem 0 1rem; padding-bottom: 0.4rem;
+      border-bottom: 2px solid var(--primary-green, #2D5016);
+      color: var(--primary-green, #2D5016); font-size: 1.3rem;
+    }
+    .cardnews-grid {
+      display: flex; flex-direction: column; gap: 2rem;
+      max-width: 760px; margin: 0 auto;
+    }
+    .news-card {
+      position: relative; display: flex; flex-direction: column;
+      background: var(--white, #fff); border: 1px solid var(--border-gray, #E8E8E6);
+      border-radius: 14px; overflow: hidden;
+    }
+    .news-card.wide { grid-column: 1 / -1; min-height: 0; }
+    .news-top {
+      background: var(--primary-green, #2D5016); color: #fff;
+      padding: 1.1rem 1.6rem 1rem;
+    }
+    .news-num { font-size: 0.75rem; letter-spacing: 0.08em; opacity: 0.8; }
+    .news-title { margin: 0.2rem 0 0; font-size: 1.25rem; line-height: 1.35; color: #fff; }
+    .news-body { padding: 1.4rem 1.6rem 1.6rem; flex: 1; font-size: 1rem; line-height: 1.7; }
+    .news-body p { margin: 0 0 0.6rem; }
+    .news-goal {
+      background: var(--light-gray, #F5F5F3); border-left: 4px solid var(--accent-brown, #8B7355);
+      padding: 0.55rem 0.8rem; margin: 0 0 0.9rem; font-size: 0.92rem;
+    }
+    .news-goal strong { color: var(--accent-brown, #8B7355); }
+    .news-list { margin: 0; padding-left: 1.1rem; }
+    .news-list > li { margin-bottom: 1rem; font-weight: 600; }
+    .news-list .explain {
+      display: block; font-weight: 400; font-size: 0.83rem; color: #66665F;
+      margin-top: 0.15rem; line-height: 1.55;
+    }
+
+    .cover-card .news-top { background: var(--accent-brown, #8B7355); }
+    .cover-card .news-body { display: flex; flex-direction: column; justify-content: center; }
+    .cover-big { font-size: 1.6rem; font-weight: 700; color: var(--primary-green, #2D5016); line-height: 1.35; margin-bottom: 0.8rem; }
+
+    .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; margin: 0.4rem 0 1rem; }
+    .flow span.step {
+      background: var(--light-gray, #F5F5F3); border: 1px solid var(--border-gray, #E8E8E6);
+      border-radius: 999px; padding: 0.25rem 0.7rem; font-size: 0.88rem; font-weight: 600;
+      color: var(--primary-green, #2D5016);
+    }
+    .flow span.arr { color: var(--accent-brown, #8B7355); }
+
+    .h-item { padding: 0.55rem 0; border-bottom: 1px dashed var(--border-gray, #E8E8E6); }
+    .h-item:last-child { border-bottom: none; }
+    .h-name { font-weight: 700; color: var(--primary-green, #2D5016); }
+    .h-kor { font-size: 0.85rem; color: var(--accent-brown, #8B7355); margin-left: 0.3rem; }
+    .h-desc { font-size: 0.86rem; margin-top: 0.15rem; }
+    .h-desc b { font-weight: 600; }
+
+    .bank { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; margin-bottom: 0.8rem; }
+    .bank div { background: var(--light-gray, #F5F5F3); border-radius: 10px; padding: 0.6rem 0.75rem; font-size: 0.86rem; }
+    .bank b { display: block; color: var(--primary-green, #2D5016); margin-bottom: 0.15rem; }
+    .chain { text-align: center; font-weight: 700; color: var(--primary-green, #2D5016); font-size: 0.92rem;
+      background: var(--light-gray, #F5F5F3); border-radius: 10px; padding: 0.6rem; }
+
+    /* --- 호르몬 표 --- */
+    .table-legend { display: flex; flex-wrap: wrap; gap: 1rem; font-size: 0.88rem; margin-bottom: 0.6rem; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--border-gray, #E8E8E6); border-radius: 10px; }
+    .hormone-table { border-collapse: collapse; width: 100%; min-width: 900px; font-size: 0.86rem; background: var(--white, #fff); }
+    .hormone-table th, .hormone-table td {
+      border-bottom: 1px solid var(--border-gray, #E8E8E6); border-left: 1px solid var(--border-gray, #E8E8E6);
+      padding: 0.5rem; vertical-align: middle; line-height: 1.5;
+    }
+    .hormone-table th { background: var(--light-gray, #F5F5F3); color: var(--primary-green, #2D5016); text-align: center; font-weight: 600; }
+    .hormone-table th.group { background: var(--primary-green, #2D5016); color: #fff; }
+    .hormone-table td.stage, .hormone-table th.stage-head { position: sticky; left: 0; border-left: none; }
+    .hormone-table td.stage { font-weight: 600; color: var(--primary-green, #2D5016); white-space: nowrap; background: var(--white, #fff); }
+    .hormone-table td.arrow { text-align: center; font-size: 1.15rem; font-weight: 700; width: 52px; }
+    .hormone-table td.text { vertical-align: top; }
+    .hormone-table td.text ul { margin: 0; padding-left: 1rem; }
+    .up { color: #1F6FB2; }
+    .down { color: #C0392B; }
+    .base { color: #9A9A96; font-weight: 400; }
+    .table-note { font-size: 0.83rem; color: #66665F; margin-top: 0.6rem; line-height: 1.6; }
+
+    /* ===== 인쇄 ===== */
+    @page { size: A4; margin: 12mm; }
+    @media print {
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      body { background: #fff !important; font-size: 10pt; }
+      .no-print, .print-bar, .copy-button { display: none !important; }
+      .cardnews-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; max-width: none; }
+      .news-card { min-height: 0; break-inside: avoid; page-break-inside: avoid; }
+      .news-card.wide { break-inside: auto; }
+      .news-title { font-size: 1.05rem; }
+      .news-body { font-size: 0.85rem; padding: 0.7rem 0.9rem; }
+      .table-wrap { overflow: visible; border: none; }
+      .hormone-table { min-width: 0; font-size: 7.5pt; }
+      .hormone-table td.stage, .hormone-table th.stage-head { position: static; }
+      .hormone-table td.arrow { font-size: 10pt; width: auto; }
+      .hormone-table tr, .snippet-box, .insight-box { break-inside: avoid; page-break-inside: avoid; }
+      .cardnews-part { break-after: avoid; page-break-after: avoid; }
+      .footer { break-inside: avoid; padding: 0.5rem 0; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="title">가축사양학</h1>
+      <p class="subtitle">제8주차 · 축종별 사양관리 ③ 한우 번식우 사양관리</p>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <div class="print-bar">
+      <button class="print-button" onclick="window.print()">전체 출력하기</button>
+    </div>
+
+    <!-- ===== 수업 시작 활동 (인쇄 제외) ===== -->
+    <section class="lecture-section no-print">
+      <div class="section-header">
+        <h2 class="section-title">아래 키워드를 이용하여 질문을 생성하고 질문과 답변을 패들렛에 넣자</h2>
+      </div>
+
+      <p class="section-description">
+        키워드를 자유롭게 2~3개 골라 "왜 ~할까?", "만약 ~라면?"처럼 질문을 만들어 보세요.
+        AI에게 물어본 뒤, 내 질문과 답변(내 말로 요약)을 패들렛에 올립니다.
+      </p>
+
+      <div class="snippet-box">
+        <div class="snippet-header">
+          <span class="snippet-label">키워드</span>
+          <button class="copy-button" onclick="copyToClipboard('snippet-keywords', this)">복사</button>
+        </div>
+        <div class="snippet-content keyword-snippet" id="snippet-keywords">발정, 착상, 임신 말기, 분만, 초유 포유, 재귀발정, LH, 프로게스테론, 프로락틴, 인슐린, IGF-1, 코르티솔, 성장호르몬, 곡류(에너지), 단백질, 체지방(BCS), 사료 섭취량, 더위, 젖 빨기(포유)</div>
+      </div>
+    </section>
+
+    <!-- ===== 카드뉴스: 단계별 사양관리 ===== -->
+    <h2 class="cardnews-part">단계별 번식우 사양관리</h2>
+    <div class="cardnews-grid">
+
+      <!-- 08 발정 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">01 / 08 · 발정</div>
+          <h3 class="news-title">발정, 놓치지 않기</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 적정 체형으로 정상 발정을 유도하고, 발정을 놓치지 않는다</div>
+          <ul class="news-list">
+            <li>적정 신체충실지수(BCS) 유지 — 5점 척도 기준 3 내외
+              <span class="explain">너무 마르면 LH 분비가 억제되어 무발정이 되고, 너무 살찌면 난소 기능과 수태율이 떨어집니다.</span></li>
+            <li>발정 관찰: 하루 2회 이상, 1회 30분 이상
+              <span class="explain">다른 소가 올라타도 가만히 서 있는 승가 허용이 가장 확실한 징후입니다. 맑은 점액, 외음부 부종, 울음도 함께 봅니다.</span></li>
+            <li>수정 2~3주 전 단기 증량 급여(플러싱)
+              <span class="explain">영양 수준을 잠시 높이면 인슐린·IGF-1이 올라 난포 발달과 배란을 돕습니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 09 수정 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">02 / 08 · 수정</div>
+          <h3 class="news-title">타이밍이 수태율을 만든다</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 적기에 수정하여 수태율을 높인다</div>
+          <ul class="news-list">
+            <li>발정 시작 후 12~18시간에 수정 (AM-PM 법칙)
+              <span class="explain">오전에 발정을 발견하면 그날 오후, 오후에 발견하면 다음 날 오전에 수정합니다. 배란은 발정이 끝난 뒤에 일어납니다.</span></li>
+            <li>수정 전후 사료 급변 금지
+              <span class="explain">급격한 영양 변화는 호르몬 균형을 흔들어 수정란의 질을 떨어뜨립니다.</span></li>
+            <li>단백질 과잉 급여 피하기
+              <span class="explain">혈중 요소태질소(BUN)가 높아지면 자궁 환경이 나빠져 수태율이 떨어집니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 10 착상 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">03 / 08 · 착상</div>
+          <h3 class="news-title">조용히, 일정하게</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 초기 배아 사멸을 막고 임신을 확인한다</div>
+          <ul class="news-list">
+            <li>스트레스 최소화
+              <span class="explain">이동, 합사, 고온은 코르티솔을 높여 착상을 방해합니다. 수정 후 약 6주까지가 초기 배아 사멸이 가장 많은 시기입니다.</span></li>
+            <li>영양 수준을 일정하게 유지
+              <span class="explain">배아는 자궁 분비물(자궁유)에서 영양을 받습니다. 어미의 영양이 안정되어야 자궁 환경도 안정됩니다.</span></li>
+            <li>임신 감정: 수정 후 30~60일
+              <span class="explain">초음파로는 약 30일부터 확인할 수 있습니다. 임신이 아니면 바로 다음 발정을 준비합니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 11 태아발달 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">04 / 08 · 태아발달</div>
+          <h3 class="news-title">초·중기는 적당히, 말기는 넉넉히</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 초·중기 과비를 막고, 말기에는 태아 성장과 초유 생산에 대비한다</div>
+          <ul class="news-list">
+            <li>임신 초·중기: 유지요구량 수준으로 급여
+              <span class="explain">이 시기 태아는 작아 요구량이 크지 않습니다. 과하게 먹이면 과비가 되어 난산 위험이 커집니다.</span></li>
+            <li>임신 말기(분만 전 2~3개월): 에너지·단백질 증량
+              <span class="explain">태아 성장의 대부분이 이때 일어납니다. 부족하면 허약 송아지가 태어나고 초유 품질과 분만 후 회복이 나빠집니다.</span></li>
+            <li>비타민 A·E, 셀레늄 등 광물질 보충
+              <span class="explain">초유의 면역물질 품질을 높이고 분만 후 후산정체를 예방하는 데 도움이 됩니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 12 분만 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">05 / 08 · 분만</div>
+          <h3 class="news-title">어미도 송아지도 안전하게</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 어미와 송아지 모두 안전하게 분만한다</div>
+          <ul class="news-list">
+            <li>분만 1~2주 전 분만우사(분만방)로 이동
+              <span class="explain">깨끗하고 마른 깔짚과 조용한 환경에 미리 적응시킵니다.</span></li>
+            <li>분만 징후 관찰
+              <span class="explain">유방 팽대, 외음부 부종, 미근부(꼬리 뿌리) 양옆 함몰이 나타납니다. 태아의 코르티솔에서 시작된 호르몬 변화 때문입니다.</span></li>
+            <li>난산 판단과 개입
+              <span class="explain">태아의 앞발이 보인 뒤 1~2시간이 지나도 진행이 없으면 분만을 보조하고, 필요하면 수의사를 부릅니다.</span></li>
+            <li>분만 직후 미지근한 물·양질 건초 급여, 후산 배출 확인
+              <span class="explain">분만 후 12시간이 지나도 후산이 나오지 않으면 후산정체로 처치가 필요합니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 13 초유 포유 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">06 / 08 · 초유 포유</div>
+          <h3 class="news-title">첫 젖이 평생 면역을 만든다</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 송아지는 초유로 면역을 얻고, 어미는 에너지 부족을 최소화한다</div>
+          <ul class="news-list">
+            <li>생후 1~2시간 안에 초유 섭취 확인
+              <span class="explain">송아지는 항체 없이 태어나 초유 속 항체(IgG)에 의존합니다. 장의 흡수 능력은 시간이 지날수록 빠르게 떨어집니다.</span></li>
+            <li>스스로 못 먹으면 착유하여 먹이거나 냉동 초유 급여
+              <span class="explain">허약하거나 난산으로 태어난 송아지는 초유 섭취가 늦어지기 쉽습니다.</span></li>
+            <li>어미 사료를 단계적으로 증량
+              <span class="explain">포유기는 영양 요구량이 가장 큰 시기입니다. 분만 직후에는 섭취량이 줄어 있으므로 천천히 늘립니다.</span></li>
+            <li>송아지 제대(탯줄) 소독과 보온
+              <span class="explain">제대 감염과 저체온은 초기 폐사의 주요 원인입니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 14 재귀발정 -->
+      <article class="news-card">
+        <div class="news-top">
+          <div class="news-num">07 / 08 · 재귀발정</div>
+          <h3 class="news-title">다시 1년 1산을 향해</h3>
+        </div>
+        <div class="news-body">
+          <div class="news-goal"><strong>목표</strong> 분만 후 85일 안에 다시 수태해 분만간격 12개월을 달성한다</div>
+          <ul class="news-list">
+            <li>BCS 회복 관리
+              <span class="explain">에너지 균형이 회복되어야 인슐린·IGF-1이 오르고 LH 분비가 다시 시작됩니다.</span></li>
+            <li>분만 후 30~60일부터 발정 관찰 재개
+              <span class="explain">자궁 복고(자궁이 원래 크기로 돌아오는 과정)에 약 30~40일이 걸리므로 그 이후의 발정에 수정합니다.</span></li>
+            <li>포유 자극 조절: 제한 포유, 송아지 보조사료(인공유), 조기이유
+              <span class="explain">젖 빠는 자극이 LH를 억제합니다. 포유 횟수를 줄이거나 송아지에게 보조사료를 주면 재귀발정이 빨라집니다.</span></li>
+            <li>분만 후 60일이 지나도 발정이 없으면 수의사 진료
+              <span class="explain">난소 기능 저하(난소 정지)나 난소낭종 같은 문제를 확인합니다.</span></li>
+          </ul>
+        </div>
+      </article>
+
+      <!-- 15 마무리 -->
+      <article class="news-card cover-card">
+        <div class="news-top">
+          <div class="news-num">08 / 08</div>
+          <h3 class="news-title">오늘의 정리</h3>
+        </div>
+        <div class="news-body">
+          <ul class="news-list">
+            <li>번식호르몬은 "언제", 대사호르몬은 "가능한가"를 정한다</li>
+            <li>임신 말기 영양이 송아지·초유·다음 번식까지 좌우한다</li>
+            <li>분만 후 마이너스 통장(NEB)을 빨리 벗어나야 재귀발정이 온다</li>
+            <li>사양관리 = 단계별 에너지 균형 맞추기</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="snippet-box">
+      <div class="snippet-header">
+        <span class="snippet-label">분석 과제</span>
+        <button class="copy-button" onclick="copyToClipboard('snippet-3', this)">복사</button>
+      </div>
+      <div class="snippet-content" id="snippet-3">분만 후 한우 번식우에서 음의 에너지 균형(NEB)이 생기는 이유와, 이때 성장호르몬은 오르는데 IGF-1은 떨어지는 현상을 설명해줘. 그리고 송아지의 포유 자극이 LH 분비를 억제해 재귀발정이 늦어지는 원리를 젖소와 비교해서 학부 2학년 수준으로 정리해줘.</div>
+    </div>
+
+    <div class="snippet-box">
+      <div class="snippet-header">
+        <span class="snippet-label">조사 과제</span>
+        <button class="copy-button" onclick="copyToClipboard('snippet-4', this)">복사</button>
+      </div>
+      <div class="snippet-content" id="snippet-4">한우의 목표 분만간격 12개월을 달성하려면 분만 후 며칠 안에 다시 수태해야 하는지 계산 과정과 함께 설명해줘. 그리고 분만간격이 12개월에서 14개월로 늘어나면 번식우 10마리를 키우는 농가가 10년 동안 송아지를 몇 마리 덜 얻게 되는지 계산해줘.</div>
+    </div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>가축사양학 강의 자료</p>
+      <p class="footer-note">번식 생리를 알면 사양관리가 보인다</p>
+    </div>
+  </footer>
+
+  <script>
+    function copyToClipboard(elementId, button) {
+      const text = document.getElementById(elementId).innerText;
+      const btn = button || (window.event && window.event.target);
+      navigator.clipboard.writeText(text).then(() => {
+        if (!btn) return;
+        const originalText = btn.innerText;
+        btn.innerText = '복사됨!';
+        setTimeout(() => { btn.innerText = originalText; }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>

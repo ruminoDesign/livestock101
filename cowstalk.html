@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>젖소 사양관리 낱말카드</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: 차분한 강의용 낱말카드, 군더더기 없이
+   IDEA: 교탁 위에 펼친 종이 낱말카드 30장
+   PICTURE: 6묶음 바둑판이 곧 첫 화면의 그림
+   COLOUR and TYPE: 흰 종이 카드, 짙은 녹색 #2D5016, 갈색 보조 #8B7355, Noto Sans KR
+   LAYOUT: 묶음 제목 + 5칸 바둑판 → 클릭 시 한 장 카드 */
+:root{color-scheme:light dark;
+  --bg:light-dark(#F4F3EE,#151A12);
+  --ink:light-dark(#2C2C2C,#ECEDE6);
+  --muted:light-dark(#6B6A60,#A9AC9C);
+  --green:#2D5016;
+  --brown:light-dark(#8B7355,#C2A983);
+  --tile:light-dark(#FFFFFF,#1F271A);
+  --line:light-dark(#E2E1DA,#2F3A28);
+  --olive:#808000}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 'Noto Sans KR',-apple-system,'Segoe UI',sans-serif;overflow-x:clip;min-height:100vh;display:flex;flex-direction:column}
+header{padding:clamp(24px,4vw,44px) max(5vw,16px) 8px;max-width:1240px;margin:0 auto;width:100%}
+header h1{margin:0;font-size:clamp(26px,4vw,36px);line-height:1.15;color:var(--ink);text-wrap:balance}
+header p{margin:6px 0 0;color:var(--muted);font-size:15px}
+main{flex:1;width:100%;max-width:1240px;margin:0 auto;padding:12px max(5vw,16px) 24px}
+
+/* 바둑판 */
+.group{margin:22px 0 8px}
+.group h2{margin:0 0 10px;font-size:17px;font-weight:700;color:var(--brown)}
+.group h2 span{color:var(--muted);font-weight:500;font-size:14px;margin-left:6px}
+.grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+.tile{appearance:none;border:1px solid var(--line);background:var(--tile);color:var(--ink);border-radius:10px;min-height:92px;padding:12px 10px;font:inherit;font-size:15px;font-weight:500;line-height:1.35;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:4px;transition:transform .15s,border-color .15s,box-shadow .15s}
+.tile small{font-size:13px;color:var(--muted);font-weight:400}
+.tile:hover{border-color:var(--green);box-shadow:0 4px 14px rgba(45,80,22,.12);transform:translateY(-2px)}
+.tile:focus-visible,.nav button:focus-visible{outline:3px solid var(--green);outline-offset:2px}
+
+/* 카드 보기 */
+#cardView{display:none;padding-top:8px}
+body.reading #gridView{display:none}
+body.reading #cardView{display:block}
+.card{max-width:680px;margin:12px auto 0;background:#FFFFFF;border:1px solid #E2E1DA;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.08);padding:clamp(24px,5vw,48px) clamp(20px,5vw,48px) 20px;display:flex;flex-direction:column;min-height:380px;animation:rise .25s ease}
+.meta{text-align:center;font-size:13px;color:#8B7355;margin-bottom:14px}
+.term{text-align:center;font-weight:700;font-size:20px;color:#000000;margin:0 0 20px;line-height:1.4}
+.desc{flex:1;font-size:16px;font-weight:400;color:#2D5016;margin:0;line-height:1.75;word-break:keep-all}
+.desc p{margin:0 0 10px}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:28px;padding-top:16px;border-top:1px solid #ECEBE5}
+.nav button{appearance:none;border:0;background:none;cursor:pointer;font:inherit;min-width:44px;min-height:44px;border-radius:8px;color:#2D5016}
+.nav .arrow{font-size:22px;line-height:1;padding:0 10px}
+.nav .arrow:hover,.nav .all:hover{background:#F1F4EC}
+.nav .arrow:disabled{opacity:.25;cursor:default;background:none}
+.nav .all{font-size:15px;font-weight:500;padding:0 16px}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 출력 */
+.tools{margin-top:14px}
+.print-btn{appearance:none;border:1px solid var(--green);background:var(--green);color:#fff;font:inherit;font-size:15px;font-weight:500;min-height:44px;padding:0 18px;border-radius:10px;cursor:pointer}
+.print-btn:hover{filter:brightness(1.15)}
+.print-btn:focus-visible{outline:3px solid var(--brown);outline-offset:2px}
+body.reading .tools{display:none}
+#printView{display:none}
+@media print{
+  @page{margin:15mm}
+  body{background:#fff;color:#000;display:block;min-height:0}
+  header{padding:0 0 8px}
+  header h1{color:#000;font-size:22px}
+  header p{color:#444}
+  .tools,#gridView,#cardView{display:none!important}
+  main{padding:0;max-width:none}
+  #printView{display:block}
+  .pg h2{font-size:15px;color:#8B7355;margin:16px 0 6px;border-bottom:1px solid #ccc;padding-bottom:4px;break-after:avoid}
+  .pc{break-inside:avoid;border:1px solid #ddd;border-radius:6px;padding:8px 12px;margin:0 0 8px}
+  .pc h3{margin:0 0 4px;font-size:13.5pt;color:#000;font-weight:700}
+  .pc p{margin:0 0 3px;font-size:10.5pt;line-height:1.55;color:#2D5016;word-break:keep-all}
+  .pc .brand{display:none}
+}
+.brand{display:block;text-align:center;margin-top:12px;font-family:'Dancing Script',cursive;font-size:10px;font-weight:600;color:#808000;letter-spacing:.04em}
+
+@media(max-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:520px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tile{min-height:80px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){.tile,.card{transition:none;animation:none}}
+</style>
+</head>
+<body>
+<header>
+  <h1>젖소 사양관리 · Cow's Talk</h1>
+  <p>소가 보내는 신호를 읽는 30개의 낱말</p>
+  <div class="tools"><button class="print-btn" id="printAll">전체 출력하기</button></div>
+</header>
+
+<main>
+  <section id="gridView" aria-label="낱말 전체 보기"></section>
+  <section id="printView" aria-hidden="true"></section>
+  <section id="cardView" aria-live="polite">
+    <article class="card">
+      <div class="meta" id="meta"></div>
+      <h2 class="term" id="term"></h2>
+      <div class="desc" id="desc"></div>
+      <div class="nav">
+        <button class="arrow" id="prev" aria-label="이전 낱말">◀</button>
+        <button class="all" id="all">전체 보기</button>
+        <button class="arrow" id="next" aria-label="다음 낱말">▶</button>
+      </div>
+      <span class="brand">ruminostudio</span>
+    </article>
+  </section>
+</main>
+
+
+<script>
+{
+const groups=[
+ {t:"행동학이란",s:"1–5",c:[
+  ["동물행동학 (Ethology)","동물이 무엇을, 왜, 어떻게 하는지를 연구하는 학문이다.|축산에서는 행동을 건강·복지·생산성을 읽는 지표로 쓴다. 말을 못 하는 소에게 행동은 곧 언어다."],
+  ["카우시그널 (Cow Signals)","소의 행동, 자세, 외관, 분변 같은 신호를 관찰해 문제를 일찍 찾아내는 관리 방법이다.|핵심은 ‘보고(Look) → 생각하고(Think) → 행동한다(Act)’. 기록지보다 소를 먼저 본다."],
+  ["시간 예산 (Time budget)","소가 하루 24시간을 나눠 쓰는 방식이다.|섭취 3~5시간, 반추 7~9시간, 휴식(횡와) 12~14시간, 착유 관련 2.5~3.5시간, 음수 약 30분.|한 항목이 늘어나면 다른 항목, 특히 휴식 시간이 줄어든다."],
+  ["정상 행동과 이상 행동","이상 행동은 ‘평소의 그 소, 그 무리’와 비교해서 판단한다.|섭취·반추·휴식 패턴의 변화는 눈에 보이는 질병 증상보다 먼저 나타나는 경우가 많다."],
+  ["정밀축산 센서 (PLF)","목걸이(반추·섭취), 발목 만보계(활동량·횡와), 위 속 볼루스(체온) 등으로 행동을 24시간 자동 기록한다.|개체의 평소 값과 비교해 이상이 생기면 경보를 보내며, 발정 탐지와 질병 조기 발견에 쓰인다."]]},
+ {t:"젖소의 기본 행동 특징",s:"6–10",c:[
+  ["섭취 행동","하루 9~14회에 나눠 총 3~5시간 먹는다. 새 사료를 줄 때와 착유 직후에 가장 활발하다.|함께 몰려 먹는 습성이 있어 사료조 폭(두당 약 60~75cm)이 부족하면 서열이 낮은 소가 밀려난다."],
+  ["반추 행동","하루 7~9시간 되새김질하며, 대부분 누운 상태에서 한다.|씹는 동안 하루 100L가 넘는 침이 나와 위 속 산도를 완충한다.|섬유질이 부족하거나 스트레스를 받으면 반추 시간이 줄어든다."],
+  ["횡와(휴식) 행동","하루 12~14시간 누워 있다. 누우면 유방으로 가는 혈류가 늘고 발굽이 쉰다.|휴식이 1시간 늘면 산유량이 약 1kg 늘어난다는 보고가 있다.|우상이 불편하면 가장 먼저 줄어드는 행동이다."],
+  ["사회 행동·서열","무리 안에는 위계가 있어 상위 소가 사료조·물·우상에 먼저 접근한다.|초산우와 체구가 작은 소가 불리하다.|그룹을 옮기면 서열을 다시 정하느라 섭취량과 산유량이 떨어지므로 전환기에는 이동을 최소화한다."],
+  ["음수 행동","하루 80~150L를 마시고, 우유 1kg을 만드는 데 물이 약 4L 필요하다.|착유 직후와 사료 섭취 중에 많이 마신다.|물이 부족하면 섭취량과 산유량이 함께 떨어진다."]]},
+ {t:"젖소의 주요 대사성 질병",s:"11–15",c:[
+  ["케토시스","비유 초기 에너지 부족으로 체지방을 과하게 분해하면서 케톤체(BHB 등)가 혈액에 쌓이는 병이다.|분만 후 2~6주에 많다. 식욕 저하, 산유량 감소, 아세톤 냄새가 나타난다.|증상이 없는 잠재성 케토시스는 혈중 BHB 1.2 mmol/L 이상으로 판정한다."],
+  ["지방간","분만 전후 체지방에서 나온 지방산이 간에서 다 처리되지 못하고 중성지방으로 쌓이는 병이다.|건유기에 너무 살찐 소(BCS 3.75 이상)에서 잘 생긴다.|케토시스와 함께 오는 경우가 많고 면역력을 떨어뜨린다."],
+  ["유열 (저칼슘혈증)","분만 직후 초유로 칼슘이 대량으로 빠져나가 혈중 칼슘이 급격히 떨어지는 병이다.|근육이 수축하지 못해 일어서지 못한다. 분만 후 24~72시간 이내, 산차가 많은 소에서 흔하다.|증상이 없는 잠재성 저칼슘혈증도 후산정체와 제4위 전위의 위험을 높인다."],
+  ["반추위 산독증 (SARA)","농후사료가 많고 유효섬유가 부족해 위 속 pH가 약 5.6 이하로 하루 몇 시간씩 떨어지는 상태다.|증상이 뚜렷하지 않아 놓치기 쉽다. 섭취량이 들쭉날쭉하고 변이 묽어지며 유지방률이 떨어진다.|몇 주에서 몇 달 뒤 제엽염으로 나타난다."],
+  ["제4위 전위","제4위에 가스가 차서 제자리를 벗어나는 병으로, 대부분 왼쪽으로 이동한다(LDA).|분만 후 한 달 이내에 많다. 섭취량이 줄어 생긴 빈 공간과 저칼슘으로 인한 위 운동 저하가 원인이다.|왼쪽 옆구리를 두드리면 ‘핑’ 하는 금속음이 난다."]]},
+ {t:"행동과 대사성 질병의 연결",s:"16–20",c:[
+  ["분만 전 섭취량 감소","분만이 가까워지면 섭취량이 어느 정도 줄어드는 것은 정상이다.|그러나 크게 줄어든 소는 에너지 부족이 일찍 시작되어 체지방을 과하게 동원하고 지방간·케토시스로 이어진다.|분만 전 사료 잔량과 섭취 시간을 지켜보는 것이 예방의 출발점이다."],
+  ["반추 시간 급감","질병 증상이 겉으로 드러나기 며칠 전부터 반추 시간이 줄어든다.|개체 평소 값보다 크게 줄면 케토시스, 제4위 전위, SARA, 유방염 등을 의심한다.|목걸이 센서가 가장 먼저 알려주는 경보다."],
+  ["기립 곤란·기립 지연","칼슘이 부족하면 근육이 힘을 쓰지 못해 일어서지 못하거나 일어서는 데 오래 걸린다.|엎드린 채 고개를 옆구리 쪽으로 돌리고, 귀가 차갑고 체온이 낮다.|분만 직후 이런 모습이면 유열을 의심하고 즉시 수의사를 부른다."],
+  ["선별섭취 (Sorting)","긴 풀은 남기고 곡류만 골라 먹는 행동이다. 실제로 먹은 사료가 설계보다 농후사료 비율이 높아져 SARA를 부른다.|신호는 사료조를 코로 파헤치는 모습, 잔량에 긴 풀만 남은 모습이다.|TMR 수분과 조사료 길이를 조절하고, 자주 급여하고 밀어주어 줄인다."],
+  ["등 굽은 보행 (보행점수)","SARA가 반복되면 발굽 혈류가 망가져 제엽염이 생기고, 소는 아픈 발을 아끼려 등을 굽히고 걷는다.|보행점수(1~5점)에서 3점 이상이면 파행이다.|아픈 소는 덜 눕고 덜 먹으러 가서 또 다른 대사 문제를 부른다."]]},
+ {t:"유성분의 종류와 합성 원리",s:"21–25",c:[
+  ["유당","혈중 포도당을 원료로 유선에서 만들어진다.|유당이 물을 끌어당겨(삼투압) 우유의 양을 결정하므로, 유당 함량은 약 4.7~4.9%로 거의 일정하다.|포도당이 부족하면 유당과 함께 산유량이 줄어든다."],
+  ["유지방 ① de novo 합성","유선 세포가 위에서 만들어진 아세트산과 BHB를 원료로 짧고 중간 길이의 지방산을 직접 만든다.|유지방산의 약 40~50%가 이렇게 만들어지며, 섬유질이 충분할 때 활발하다."],
+  ["유지방 ② 혈중 유래 지방산","사료 지방과 체지방에서 나온 긴 지방산을 유선이 혈액에서 그대로 가져와 쓴다.|비유 초기에 체지방을 많이 동원하면 이 비율이 급격히 높아진다."],
+  ["유단백 (카제인·유청)","카제인(약 80%)과 유청단백질로 구성되며, 혈중 아미노산으로 유선에서 합성된다.|에너지가 충분해야 합성이 잘 되기 때문에 유단백률은 에너지 상태를 보여주는 지표다.|홀스타인 기준 약 3.0~3.4%."],
+  ["MUN (우유 요소질소)","단백질이 분해되며 생긴 암모니아가 간에서 요소로 바뀌고, 혈액을 거쳐 우유로 넘어온 것이다.|혈중 요소 농도를 그대로 반영해 단백질 대사를 보여주는 창이 된다.|적정 범위는 대략 10~16 mg/dL."]]},
+ {t:"유성분으로 알 수 있는 대사성 질병",s:"26–30",c:[
+  ["유지방-유단백 역전","정상이라면 유지방률이 유단백률보다 높다.|SARA가 오면 위 속 발효가 바뀌어 유지방 합성을 억제하는 물질이 생기고, de novo 합성이 줄어 유지방률이 떨어진다.|우군의 10~15% 이상에서 역전이 보이면 SARA를 의심한다."],
+  ["FPR 1.4 이상","FPR은 유지방률 ÷ 유단백률이다.|비유 초기 체지방 동원으로 유지방은 오르고 에너지 부족으로 유단백은 내려가 비율이 커진다.|분만 후 100일 이내에 1.4 이상이면 케토시스를 의심하고, 1.0 미만이면 SARA를 의심한다."],
+  ["분만 직후 유지방 급등·장쇄지방산 증가","첫 검정에서 유지방률이 비정상적으로 높으면(예: 5% 이상) 체지방이 과하게 동원되고 있다는 뜻이다.|우유 지방산 조성에서 긴 지방산 비율이 높아지면 간에 지방이 쌓일 위험이 크다.|건유기에 과비했던 소에서 흔하다."],
+  ["우유 BHB","혈액의 케톤체 일부가 우유로 넘어오므로, 검정 우유로 잠재성 케토시스 개체를 걸러낼 수 있다.|분만 후 5~60일 사이 개체를 집중적으로 본다.|약 0.15~0.20 mmol/L 이상이면 의심한다(기준은 기관마다 다르다)."],
+  ["유단백 저하·MUN 이상","유단백률이 3.0% 아래로 떨어지면 에너지 부족을 의심한다.|MUN이 높으면 단백질 과잉이나 에너지 부족을, 낮으면 단백질 부족을 뜻한다. MUN이 높은 우군은 수태율이 떨어지기 쉽다.|유단백과 MUN을 함께 보면 에너지와 단백질의 균형을 읽을 수 있다."]]}
+];
+
+const cards=[];
+groups.forEach((g,gi)=>g.c.forEach(([t,d])=>cards.push({t,d,g:g.t,gi})));
+
+const esc=s=>s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const gridView=document.getElementById('gridView');
+let n=0;
+gridView.innerHTML=groups.map(g=>`<div class="group"><h2>${esc(g.t)}<span>${g.s}</span></h2><div class="grid">${
+  g.c.map(([t])=>{const i=n++;return `<button class="tile" data-i="${i}"><small>${i+1}</small>${esc(t)}</button>`}).join('')
+}</div></div>`).join('');
+
+document.getElementById('printView').innerHTML=groups.map((g,gi)=>`<div class="pg"><h2>${esc(g.t)} (${g.s})</h2>${
+  g.c.map(([t,d],k)=>`<div class="pc"><h3>${gi*5+k+1}. ${esc(t)}</h3>${d.split('|').map(p=>`<p>${esc(p)}</p>`).join('')}</div>`).join('')
+}</div>`).join('');
+document.getElementById('printAll').addEventListener('click',()=>{try{window.print()}catch(e){}});
+
+const meta=document.getElementById('meta'),term=document.getElementById('term'),desc=document.getElementById('desc');
+const prev=document.getElementById('prev'),next=document.getElementById('next'),all=document.getElementById('all');
+let cur=0;
+
+function show(i){
+  cur=i;const c=cards[i];
+  meta.textContent=`${c.g} · ${i+1} / ${cards.length}`;
+  term.textContent=c.t;
+  desc.innerHTML=c.d.split('|').map(p=>`<p>${esc(p)}</p>`).join('');
+  prev.disabled=i===0;next.disabled=i===cards.length-1;
+  document.body.classList.add('reading');
+  const card=document.querySelector('.card');card.style.animation='none';card.offsetHeight;card.style.animation='';
+  window.scrollTo({top:0});
+}
+function showAll(){
+  document.body.classList.remove('reading');
+  const t=gridView.querySelector(`[data-i="${cur}"]`);
+  if(t){t.scrollIntoView({block:'center'});t.focus({preventScroll:true})}
+}
+gridView.addEventListener('click',e=>{const b=e.target.closest('.tile');if(b)show(+b.dataset.i)});
+prev.addEventListener('click',()=>{if(cur>0)show(cur-1)});
+next.addEventListener('click',()=>{if(cur<cards.length-1)show(cur+1)});
+all.addEventListener('click',showAll);
+document.addEventListener('keydown',e=>{
+  if(!document.body.classList.contains('reading'))return;
+  if(e.key==='ArrowLeft'&&cur>0)show(cur-1);
+  else if(e.key==='ArrowRight'&&cur<cards.length-1)show(cur+1);
+  else if(e.key==='Escape')showAll();
+});
+}
+</script>
+</body>
+</html>
